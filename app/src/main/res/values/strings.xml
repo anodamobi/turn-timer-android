@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ANODA-Turn-Timer</string>
+    <string name="turn_timer">Turn Timer</string>
 </resources>

@@ -7,6 +7,7 @@ import anoda.mobi.anoda_turn_timer.R
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
+import org.jetbrains.anko.toast
 
 class TimerActivity : MvpAppCompatActivity(), TimerView {
 
@@ -68,6 +69,12 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     override fun updateTimerText(text: String) {
         runOnUiThread {
             tvTimerText.text = text
+        }
+    }
+
+    override fun playSignal() {
+        runOnUiThread {
+            toast("Play signal")
         }
     }
 }

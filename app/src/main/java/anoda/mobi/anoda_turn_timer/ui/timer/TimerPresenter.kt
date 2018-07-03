@@ -27,7 +27,11 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     //todo get from prefs
     private fun getTimeToEnd(): Long {
-        return 4
+        return 10
+    }
+
+    private fun getTimeToEndPlaySignal(): Long {
+        return 3
     }
 
     fun onStartTimerClick() {
@@ -66,11 +70,11 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showTimerInProgress()
         viewState.showPauseButton()
 
-        aTimer.startTimer(getTimeToEnd())
+        aTimer.startTimer(getTimeToEnd(), getTimeToEndPlaySignal())
     }
 
     private fun resetTimer() {
-        aTimer.resetTimer(getTimeToEnd())
+        aTimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
 
         isTimerStarted = true
         isTimerPaused = false
@@ -96,7 +100,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         aTimer.resumeTimer()
     }
 
-    override fun onTimerFinished() {
+    override fun onMainTimerFinished() {
         isTimerStarted = false
         isTimerPaused = false
 
@@ -117,4 +121,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.updateTimerText(timeLeftText)
     }
 
+    override fun onSecondaryTimerFinished() {
+        viewState.playSignal()
+    }
 }

@@ -11,49 +11,60 @@ class ATimer(val timerInteraction: ATimerInteraction) {
 
     var isTimerStarted = false
         private set
-    var isTimerPaused = false
-        private set
 
     private var secondsToEnd = 0L
+    private var secondsSecondaryBeforeEnd = 0L
     private var secondsElapsed = 0L
+
     private var secondsLeft: Long = 0L
         get() = secondsToEnd - secondsElapsed
 
 
     private lateinit var timer: Timer
 
-    public fun startTimer(secondsToEnd: Long) {
+    public fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         if (secondsToEnd < 0) {
             throw IllegalArgumentException("Seconds can't be negative")
         }
 
         this.secondsToEnd = secondsToEnd
+        this.secondsSecondaryBeforeEnd = secondsSecondaryBeforeEnd
 
         if (isTimerStarted.not()) {
             startTimer()
         } else {
-            resetTimer(secondsToEnd)
+            resetTimer(secondsToEnd, secondsSecondaryBeforeEnd)
         }
     }
 
     public fun resumeTimer() {
-        //todo implement
+        startTimer(secondsToEnd, secondsSecondaryBeforeEnd)
     }
 
     public fun pauseTimer() {
-        //todo implement
+        timer.cancel()
+        timer.purge()
+
+        val secondsToEnd = this.secondsLeft
+        val secondsSecondaryBeforeEnd = this.secondsSecondaryBeforeEnd
+        resetCounters()
+
+        this.secondsToEnd = secondsToEnd
+        this.secondsSecondaryBeforeEnd = secondsSecondaryBeforeEnd
+
+        isTimerStarted = false
     }
 
     public fun stopTimer() {
         timer.cancel()
         timer.purge()
-        timerInteraction.onTimerFinished()
+        timerInteraction.onMainTimerFinished()
         resetCounters()
     }
 
-    public fun resetTimer(secondsToEnd: Long) {
+    public fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         stopTimer()
-        startTimer(secondsToEnd)
+        startTimer(secondsToEnd, secondsSecondaryBeforeEnd)
     }
 
     private fun startTimer() {
@@ -66,6 +77,9 @@ class ATimer(val timerInteraction: ATimerInteraction) {
                     stopTimer()
                     return
                 }
+                if (secondsLeft == secondsSecondaryBeforeEnd) {
+                    timerInteraction.onSecondaryTimerFinished()
+                }
                 timerInteraction.onNewTimerCycle(secondsLeft)
             }
         }, TIMER_DELAY, TIMER_INTERVAL)
@@ -74,13 +88,15 @@ class ATimer(val timerInteraction: ATimerInteraction) {
     private fun resetCounters() {
         secondsToEnd = 0
         secondsElapsed = 0
-        isTimerPaused = false
+        secondsSecondaryBeforeEnd = 0
         isTimerStarted = false
     }
 }
 
 interface ATimerInteraction {
-    fun onTimerFinished()
+    fun onMainTimerFinished()
+
+    fun onSecondaryTimerFinished()
 
     fun onNewTimerCycle(timeLeft: Long)
 }

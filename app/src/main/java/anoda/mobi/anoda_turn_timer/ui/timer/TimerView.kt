@@ -22,4 +22,7 @@ interface TimerView : MvpView {
 
     @StateStrategyType(SkipStrategy::class)
     fun playSignal()
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun updateTimerBackgroundProgress(angle: Float)
 }

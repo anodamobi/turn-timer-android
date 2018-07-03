@@ -14,6 +14,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     private var isTimerPaused = false
     private var aTimer: ATimer = ATimer(this)
 
+    private var innerElapsedTime = 0
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
@@ -22,7 +24,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     override fun detachView(view: TimerView?) {
-        aTimer.stopTimer()
+        if (isTimerStarted || isTimerPaused)
+            aTimer.stopTimer()
         super.detachView(view)
     }
 
@@ -108,9 +111,12 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
         viewState.showTimerEndProgress()
         viewState.showStartButton()
+
+        innerElapsedTime = 0
     }
 
     override fun onNewTimerCycle(timeLeft: Long) {
+        innerElapsedTime++
         val text = formatText(timeLeft)
         onTimerNextIteration(text)
     }
@@ -128,6 +134,13 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     private fun onTimerNextIteration(timeLeftText: String) {
         viewState.updateTimerText(timeLeftText)
+        viewState.updateTimerBackgroundProgress(getAngleForTimerBackground())
+    }
+
+    private fun getAngleForTimerBackground(): Float {
+        val anglesInCircle = 360
+        val stepSize = anglesInCircle.toFloat() / getTimeToEnd()
+        return 360 - (innerElapsedTime * stepSize)
     }
 
     override fun onSecondaryTimerFinished() {

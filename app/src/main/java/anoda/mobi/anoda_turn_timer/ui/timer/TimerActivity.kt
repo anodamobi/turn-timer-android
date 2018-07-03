@@ -77,4 +77,10 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
             toast("Play signal")
         }
     }
+
+    override fun updateTimerBackgroundProgress(angle: Float) {
+        runOnUiThread {
+            tpbvTimerBackground.update(angle)
+        }
+    }
 }

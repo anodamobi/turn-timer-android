@@ -5,6 +5,7 @@ import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 @InjectViewState
 class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
@@ -27,9 +28,10 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     //todo get from prefs
     private fun getTimeToEnd(): Long {
-        return 10
+        return 65
     }
 
+    //todo get from prefs
     private fun getTimeToEndPlaySignal(): Long {
         return 3
     }
@@ -114,7 +116,14 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun formatText(timeLeft: Long): String {
-        return timeLeft.toString()
+        val minutes = TimeUnit.SECONDS.toMinutes(timeLeft)
+        val seconds = timeLeft - minutes * 60
+        return run {
+            if (minutes > 0) {
+                return@run String.format(if (seconds > 10) "%d:%d" else "%d:0%d", minutes, seconds)
+            }
+            return@run "$seconds"
+        }
     }
 
     private fun onTimerNextIteration(timeLeftText: String) {

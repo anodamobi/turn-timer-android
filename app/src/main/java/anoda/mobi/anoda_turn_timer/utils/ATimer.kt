@@ -4,7 +4,7 @@ import java.util.*
 
 class ATimer(val timerInteraction: ATimerInteraction) {
 
-    class ATimerStateManager {
+   private class ATimerStateManager {
         var isTimerStarted = false
             private set
 

@@ -1,14 +1,34 @@
 package anoda.mobi.anoda_turn_timer.ui.timer
 
+import anoda.mobi.anoda_turn_timer.utils.ATimer
+import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import timber.log.Timber
 
 @InjectViewState
-class TimerPresenter : MvpPresenter<TimerView>() {
+class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     private var isTimerStarted = false
     private var isTimerPaused = false
+    private var aTimer: ATimer = ATimer(this)
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+
+        val text = formatText(getTimeToEnd())
+        viewState.updateTimerText(text)
+    }
+
+    override fun detachView(view: TimerView?) {
+        aTimer.stopTimer()
+        super.detachView(view)
+    }
+
+    //todo get from prefs
+    private fun getTimeToEnd(): Long {
+        return 4
+    }
 
     fun onStartTimerClick() {
         if (isTimerPaused.not()) {
@@ -27,7 +47,11 @@ class TimerPresenter : MvpPresenter<TimerView>() {
     }
 
     fun onTimerTextClick() {
-        resetTimer()
+        if (isTimerStarted.not()) {
+            startTimer()
+        } else {
+            resetTimer()
+        }
     }
 
     fun onSettingsClick() {
@@ -41,13 +65,19 @@ class TimerPresenter : MvpPresenter<TimerView>() {
 
         viewState.showTimerInProgress()
         viewState.showPauseButton()
+
+        aTimer.startTimer(getTimeToEnd())
     }
 
     private fun resetTimer() {
+        aTimer.resetTimer(getTimeToEnd())
+
+        isTimerStarted = true
+        isTimerPaused = false
+
+        viewState.showTimerInProgress()
+        viewState.showPauseButton()
         Timber.i("reset")
-        startTimer()
-
-
     }
 
     private fun pauseTimer() {
@@ -55,6 +85,7 @@ class TimerPresenter : MvpPresenter<TimerView>() {
         Timber.i("pause")
 
         viewState.showStartButton()
+        aTimer.pauseTimer()
     }
 
     private fun resumeTimer() {
@@ -62,9 +93,10 @@ class TimerPresenter : MvpPresenter<TimerView>() {
 
         Timber.i("resume")
         viewState.showPauseButton()
+        aTimer.resumeTimer()
     }
 
-    private fun onTimerFinished() {
+    override fun onTimerFinished() {
         isTimerStarted = false
         isTimerPaused = false
 
@@ -72,8 +104,17 @@ class TimerPresenter : MvpPresenter<TimerView>() {
         viewState.showStartButton()
     }
 
-    private fun onTimerNextIteration() {
-        viewState.updateTimerText("1234")
+    override fun onNewTimerCycle(timeLeft: Long) {
+        val text = formatText(timeLeft)
+        onTimerNextIteration(text)
+    }
+
+    private fun formatText(timeLeft: Long): String {
+        return timeLeft.toString()
+    }
+
+    private fun onTimerNextIteration(timeLeftText: String) {
+        viewState.updateTimerText(timeLeftText)
     }
 
 }

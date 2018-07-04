@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_background"
-    tools:context=".ui.timer.TimerActivity">
+    tools:context=".ui.timer.TimerActivity"
+    android:fitsSystemWindows="true">
 
     <ImageView
         android:id="@+id/ivSettings"
@@ -16,7 +16,7 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_settings"/>
+        app:srcCompat="@drawable/ic_settings" />
 
     <ViewSwitcher
         android:id="@+id/vsActionButtons"
@@ -35,7 +35,7 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_start"/>
+            app:srcCompat="@drawable/ic_start" />
 
         <ImageView
             android:id="@+id/ivPause"
@@ -45,7 +45,7 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_pause"/>
+            app:srcCompat="@drawable/ic_pause" />
     </ViewSwitcher>
 
     <ViewSwitcher
@@ -70,16 +70,17 @@
             <anoda.mobi.anoda_turn_timer.view.TimerProgressBackgroundView
                 android:id="@+id/tpbvTimerBackground"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
 
             <TextView
                 android:id="@+id/tvTimerText"
+                style="@style/TitleTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="100sp"
-                tools:text="00:00"/>
+                android:textSize="130sp"
+                tools:text="00:00" />
         </FrameLayout>
 
 
@@ -93,7 +94,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_reset"/>
+                android:src="@drawable/ic_reset" />
         </FrameLayout>
 
     </ViewSwitcher>

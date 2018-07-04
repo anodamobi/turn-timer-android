@@ -5,6 +5,9 @@ import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.timer.TimerActivity
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import android.view.animation.RotateAnimation
+import kotlinx.android.synthetic.main.activity_splash.*
+
 
 class SplashActivity : MvpAppCompatActivity(), SplashView {
 
@@ -14,7 +17,6 @@ class SplashActivity : MvpAppCompatActivity(), SplashView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
     }
 
     override fun startTimerActivity() {
@@ -22,4 +24,5 @@ class SplashActivity : MvpAppCompatActivity(), SplashView {
         finish()
     }
 
+    override fun startAnimation(animator: RotateAnimation) = ivHourglass.startAnimation(animator)
 }

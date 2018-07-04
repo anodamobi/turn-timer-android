@@ -2,12 +2,14 @@ package anoda.mobi.anoda_turn_timer.ui.timer
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
-import org.jetbrains.anko.toast
 
 class TimerActivity : MvpAppCompatActivity(), TimerView {
 
@@ -73,8 +75,17 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun playSignal() {
-        runOnUiThread {
-            toast("Play signal")
+        val uri = Uri.parse("android.resource://anoda.mobi.anoda_turn_timer/${R.raw.signal}")
+        val mediaPlayer: MediaPlayer = MediaPlayer()
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer.setVolume(1f, 1f)
+        mediaPlayer.setDataSource(this, uri)
+        mediaPlayer.prepare()
+        mediaPlayer.start()
+
+        mediaPlayer.setOnCompletionListener {
+            it.start()
+            it.release()
         }
     }
 

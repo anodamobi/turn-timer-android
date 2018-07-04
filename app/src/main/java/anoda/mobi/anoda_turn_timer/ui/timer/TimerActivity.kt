@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
+import anoda.mobi.anoda_turn_timer.utils.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -13,6 +14,13 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
 
     companion object {
         fun getStartIntent(context: Context): Intent = Intent(context, TimerActivity::class.java)
+
+        const val TIMER_IN_PROGRESS = 0
+        const val TIMER_END_PROGRESS = 1
+        const val PAUSE_BUTTON = 1
+        const val START_BUTTON = 0
+
+        const val SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.signal}"
     }
 
     @InjectPresenter
@@ -38,22 +46,42 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun showPauseButton() {
-        vsActionButtons.displayedChild = 1
+        runOnUiThread {
+            vsActionButtons.displayedChild = PAUSE_BUTTON
+        }
     }
 
     override fun showStartButton() {
-        vsActionButtons.displayedChild = 0
+        runOnUiThread {
+            vsActionButtons.displayedChild = START_BUTTON
+        }
     }
 
     override fun showTimerInProgress() {
-        vsTimerReset.displayedChild = 0
+        runOnUiThread {
+            vsTimerReset.displayedChild = TIMER_IN_PROGRESS
+        }
     }
 
     override fun showTimerEndProgress() {
-        vsTimerReset.displayedChild = 1
+        runOnUiThread {
+            vsTimerReset.displayedChild = TIMER_END_PROGRESS
+        }
     }
 
     override fun updateTimerText(text: String) {
-        tvTimerText.text = text
+        runOnUiThread {
+            tvTimerText.text = text
+        }
+    }
+
+    override fun playSignal() {
+        PlaySoundManager.playSound(this, SIGNAL_URI)
+    }
+
+    override fun updateTimerBackgroundProgress(angle: Float) {
+        runOnUiThread {
+            tpbvTimerBackground.update(angle)
+        }
     }
 }

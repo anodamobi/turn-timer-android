@@ -8,7 +8,6 @@
     android:background="@drawable/splash_background"
     tools:context=".ui.timer.TimerActivity">
 
-
     <ImageView
         android:id="@+id/ivSettings"
         android:layout_width="@dimen/circle_button_size"
@@ -47,14 +46,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_pause"/>
-
-
     </ViewSwitcher>
 
     <ViewSwitcher
         android:id="@+id/vsTimerReset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -64,21 +61,40 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26">
+        app:layout_constraintVertical_bias="0.10">
 
-        <TextView
-            android:id="@+id/tvTimerText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="100sp"
-            tools:text="00:00"/>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ivReset"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:src="@drawable/ic_reset"/>
+            <anoda.mobi.anoda_turn_timer.view.TimerProgressBackgroundView
+                android:id="@+id/tpbvTimerBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <TextView
+                android:id="@+id/tvTimerText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="100sp"
+                tools:text="00:00"/>
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/timer_circle_background">
+
+            <ImageView
+                android:id="@+id/ivReset"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_reset"/>
+        </FrameLayout>
 
     </ViewSwitcher>
 </android.support.constraint.ConstraintLayout>

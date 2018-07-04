@@ -28,6 +28,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     private var isTimerStarted = false
     private var isTimerPaused = false
     private var aTimer: ATimer = ATimer(this)
+    private var currentTimerTimeToEnd = 0L //timeToEnd for current started timer
 
     private var innerElapsedTime = 0
 
@@ -96,10 +97,12 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showPauseButton()
 
         aTimer.startTimer(getTimeToEnd(), getTimeToEndPlaySignal())
+        setTimeToEnd()
     }
 
     private fun resetTimer() {
         aTimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
+        setTimeToEnd()
 
         isTimerStarted = true
         isTimerPaused = false
@@ -107,6 +110,10 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showTimerInProgress()
         viewState.showPauseButton()
         Timber.i("reset")
+    }
+
+    private fun setTimeToEnd(){
+        currentTimerTimeToEnd = getTimeToEnd()
     }
 
     private fun pauseTimer() {
@@ -158,7 +165,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun getAngleForTimerBackground(): Float {
-        val stepSize = ANGLES_IN_CIRCLE.toFloat() / getTimeToEnd()
+        val stepSize = ANGLES_IN_CIRCLE.toFloat() / currentTimerTimeToEnd
         return ANGLES_IN_CIRCLE - (innerElapsedTime * stepSize)
     }
 

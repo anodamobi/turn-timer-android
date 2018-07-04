@@ -7,8 +7,6 @@ import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.R
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
-import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.part_time.view.*
 import org.jetbrains.anko.share
@@ -29,7 +27,6 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
 
     private fun initView() {
         initTypeFaces()
-        setActualTime()
         setOnClickListeners()
     }
 
@@ -40,12 +37,8 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
         incTimeDuration.npSeconds.typeface = App.typeFaceRancho
     }
 
-    private fun setActualTime() {
-        presenter.onGettingActualTime()
-    }
-
     private fun setOnClickListeners() {
-        ivBack.setOnClickListener { presenter.onDataSaveAndBack() }
+        ivBack.setOnClickListener { onBackPressed() }
         ivShare.setOnClickListener { presenter.onShareAppLink() }
         incTimeDeep.npMinutes.setOnValueChangedListener { _, _, minutes -> presenter.onChangeBeepTimeMinutes(minutes) }
         incTimeDeep.npSeconds.setOnValueChangedListener { _, _, seconds -> presenter.onChangeBeepTimeSecond(seconds) }
@@ -67,7 +60,4 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
         incTimeDuration.npSeconds.value = seconds
     }
 
-    override fun onBackPressure() {
-        onBackPressed()
-    }
 }

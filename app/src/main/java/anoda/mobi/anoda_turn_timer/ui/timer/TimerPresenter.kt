@@ -1,18 +1,28 @@
 package anoda.mobi.anoda_turn_timer.ui.timer
 
+import android.content.Context
+import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.utils.ATimer
 import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
+import anoda.mobi.anoda_turn_timer.utils.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @InjectViewState
 class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     companion object {
         const val MINUTES_IN_HOUR = 60
+        const val SECONDS_IN_MINUTE = 60
         const val ANGLES_IN_CIRCLE = 360
+
+        const val READ_SETTINGS_DELAY = 500L
     }
 
     private var isTimerStarted = false
@@ -21,11 +31,11 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     private var innerElapsedTime = 0
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+    @Inject
+    lateinit var context: Context
 
-        val text = formatText(getTimeToEnd())
-        viewState.updateTimerText(text)
+    init {
+        App.appComponent.inject(this)
     }
 
     override fun onDestroy() {
@@ -34,15 +44,20 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         super.onDestroy()
     }
 
-    //todo get from prefs
-    private fun getTimeToEnd(): Long {
-        return 65
+    override fun attachView(view: TimerView?) {
+        super.attachView(view)
+        if (isTimerStarted.not() && isTimerPaused.not()) {
+            launch(UI) {
+                delay(READ_SETTINGS_DELAY, TimeUnit.MILLISECONDS)
+                val text = formatText(getTimeToEnd())
+                viewState.updateTimerText(text)
+            }
+        }
     }
 
-    //todo get from prefs
-    private fun getTimeToEndPlaySignal(): Long {
-        return 3
-    }
+    private fun getTimeToEnd() = SharedPreferencesManager.loadMainTimerTime(context).toLong()
+
+    private fun getTimeToEndPlaySignal() = SharedPreferencesManager.loadSecondaryTimerTime(context).toLong()
 
     fun onStartTimerClick() {
         if (isTimerPaused.not()) {

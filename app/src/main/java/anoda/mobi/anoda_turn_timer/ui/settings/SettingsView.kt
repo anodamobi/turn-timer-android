@@ -11,5 +11,4 @@ interface SettingsView : MvpView {
     fun showShareAppVariant()
     fun setRoundDuration(minutes: Int, seconds: Int)
     fun setBeforeBeepTime(minutes: Int, seconds: Int)
-    fun onBackPressure()
 }

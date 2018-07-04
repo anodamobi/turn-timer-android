@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
+import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -41,7 +42,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun startSettingsActivity() {
-
+        startActivity(SettingsActivity.getStartIntent(this))
     }
 
     override fun showPauseButton() {

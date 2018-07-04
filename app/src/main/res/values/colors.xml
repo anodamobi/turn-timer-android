@@ -6,4 +6,7 @@
 
     <color name="largeCircleColor">#66FFFFFF</color>
     <color name="smallCircleColor">#40FFFFFF</color>
+    <color name="veryLightPink">#fdf5eb</color>
+    <color name="warmGrey">#979797</color>
+    <color name="slateGrey">#596274</color>
 </resources>

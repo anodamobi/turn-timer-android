@@ -10,6 +10,11 @@ import java.util.concurrent.TimeUnit
 @InjectViewState
 class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
+    companion object {
+        const val MINUTES_IN_HOUR = 60
+        const val ANGLES_IN_CIRCLE = 360
+    }
+
     private var isTimerStarted = false
     private var isTimerPaused = false
     private var aTimer: ATimer = ATimer(this)
@@ -123,7 +128,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     private fun formatText(timeLeft: Long): String {
         val minutes = TimeUnit.SECONDS.toMinutes(timeLeft)
-        val seconds = timeLeft - minutes * 60
+        val seconds = timeLeft - minutes * MINUTES_IN_HOUR
         return run {
             if (minutes > 0) {
                 return@run String.format(if (seconds > 10) "%d:%d" else "%d:0%d", minutes, seconds)
@@ -138,9 +143,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun getAngleForTimerBackground(): Float {
-        val anglesInCircle = 360
-        val stepSize = anglesInCircle.toFloat() / getTimeToEnd()
-        return 360 - (innerElapsedTime * stepSize)
+        val stepSize = ANGLES_IN_CIRCLE.toFloat() / getTimeToEnd()
+        return ANGLES_IN_CIRCLE - (innerElapsedTime * stepSize)
     }
 
     override fun onSecondaryTimerFinished() {

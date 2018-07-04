@@ -2,12 +2,10 @@ package anoda.mobi.anoda_turn_timer.ui.timer
 
 import android.content.Context
 import android.content.Intent
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
+import anoda.mobi.anoda_turn_timer.utils.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -21,6 +19,8 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         const val TIMER_END_PROGRESS = 1
         const val PAUSE_BUTTON = 1
         const val START_BUTTON = 0
+
+        const val SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.signal}"
     }
 
     @InjectPresenter
@@ -76,18 +76,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun playSignal() {
-        val uri = Uri.parse("android.resource://anoda.mobi.anoda_turn_timer/${R.raw.signal}")
-        val mediaPlayer: MediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setVolume(1f, 1f)
-        mediaPlayer.setDataSource(this, uri)
-        mediaPlayer.prepare()
-        mediaPlayer.start()
-
-        mediaPlayer.setOnCompletionListener {
-            it.start()
-            it.release()
-        }
+        PlaySoundManager.playSound(this, SIGNAL_URI)
     }
 
     override fun updateTimerBackgroundProgress(angle: Float) {

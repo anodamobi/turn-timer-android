@@ -8,4 +8,20 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TitleTextView" parent="android:Widget.TextView">
+        <item name="android:textColor">@color/veryLightPink</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="NumberPicker">
+        <item name="np_dividerColor">@color/warmGrey</item>
+        <item name="np_max">59</item>
+        <item name="np_min">0</item>
+        <item name="np_selectedTextColor">@color/slateGrey</item>
+        <item name="np_textColor">@color/slateGrey</item>
+        <item name="np_value">0</item>
+        <item name="np_textSize">14sp</item>
+        <item name="np_selectedTextSize">18sp</item>
+    </style>
+
 </resources>

@@ -43,7 +43,7 @@ class TimerProgressBackgroundView
             rectF = RectF(0f, 0f, width.toFloat(), height.toFloat())
             circleCenterX = width.toFloat() / 2
             circleCenterY = height.toFloat() / 2
-            circleRadius = (circleCenterX + circleCenterY) / 2
+            circleRadius = ((circleCenterX + circleCenterY) / 2) - 10
             isRectFInitialized = true
         }
     }

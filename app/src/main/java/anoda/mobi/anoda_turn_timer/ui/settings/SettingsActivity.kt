@@ -7,6 +7,8 @@ import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.R
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.part_time.view.*
 import org.jetbrains.anko.share
@@ -66,6 +68,6 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
     }
 
     override fun onBackPressure() {
-        onBackPressure()
+        onBackPressed()
     }
 }

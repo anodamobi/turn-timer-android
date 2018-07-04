@@ -8,6 +8,7 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface TimerView : MvpView {
 
+    @StateStrategyType(SkipStrategy::class)
     fun startSettingsActivity()
 
     fun showPauseButton()

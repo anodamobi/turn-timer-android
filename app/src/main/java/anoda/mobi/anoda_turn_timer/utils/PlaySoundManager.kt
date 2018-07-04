@@ -3,12 +3,12 @@ package anoda.mobi.anoda_turn_timer.utils
 import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.net.Uri
+import androidx.core.net.toUri
 
 object PlaySoundManager {
 
     fun playSound(context: Context, uriStr: String) {
-        val uri = Uri.parse(uriStr)
+        val uri = uriStr.toUri()
         val mediaPlayer = MediaPlayer()
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         mediaPlayer.setVolume(1f, 1f)

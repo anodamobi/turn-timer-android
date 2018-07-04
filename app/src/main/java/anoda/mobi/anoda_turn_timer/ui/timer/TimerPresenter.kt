@@ -23,10 +23,10 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.updateTimerText(text)
     }
 
-    override fun detachView(view: TimerView?) {
+    override fun onDestroy() {
         if (isTimerStarted || isTimerPaused)
             aTimer.stopTimer()
-        super.detachView(view)
+        super.onDestroy()
     }
 
     //todo get from prefs

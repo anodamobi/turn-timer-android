@@ -4,7 +4,7 @@ import java.util.*
 
 class ATimer(val timerInteraction: ATimerInteraction) {
 
-   private class ATimerStateManager {
+    private class ATimerStateManager {
         var isTimerStarted = false
             private set
 
@@ -74,7 +74,7 @@ class ATimer(val timerInteraction: ATimerInteraction) {
     private val timerStateManager = ATimerStateManager()
 
     public fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
-        if (secondsToEnd < 0) {
+        if (secondsToEnd < 0 || secondsSecondaryBeforeEnd < 0) {
             throw IllegalArgumentException("Seconds can't be negative")
         }
 

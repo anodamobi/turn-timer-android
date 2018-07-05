@@ -1,13 +1,10 @@
 package anoda.mobi.anoda_turn_timer.ui.splash
 
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.RotateAnimation
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.timer.TimerActivity
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
-import kotlinx.android.synthetic.main.activity_splash.*
 
 
 class SplashActivity : MvpAppCompatActivity(), SplashView {

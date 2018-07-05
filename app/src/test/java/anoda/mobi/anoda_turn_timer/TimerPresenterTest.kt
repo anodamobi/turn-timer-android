@@ -226,7 +226,7 @@ class TimerPresenterTest {
         PowerMockito.`when`(presenter.onSecondaryTimerFinished()).thenCallRealMethod()
         presenter.onSecondaryTimerFinished()
 
-        Mockito.verify(timerViewState).playSignal()
+        Mockito.verify(timerViewState).playMainSignal()
 
         presenter.onDestroy()
     }

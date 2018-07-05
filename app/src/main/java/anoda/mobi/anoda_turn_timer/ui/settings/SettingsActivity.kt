@@ -34,12 +34,8 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
     private fun initTypeFaces() {
         incTimeDeep.npMinutes.typeface = App.typeFaceRancho
         incTimeDeep.npSeconds.typeface = App.typeFaceRancho
-        incTimeDeep.tvMins.typeface = App.typeFaceRancho
-        incTimeDeep.tvSecs.typeface = App.typeFaceRancho
         incTimeDuration.npMinutes.typeface = App.typeFaceRancho
         incTimeDuration.npSeconds.typeface = App.typeFaceRancho
-        incTimeDuration.tvMins.typeface = App.typeFaceRancho
-        incTimeDuration.tvSecs.typeface = App.typeFaceRancho
     }
 
     private fun setOnClickListeners() {

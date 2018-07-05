@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.R
+
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -32,9 +33,13 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
 
     private fun initTypeFaces() {
         incTimeDeep.npMinutes.typeface = App.typeFaceRancho
-        incTimeDuration.npMinutes.typeface = App.typeFaceRancho
         incTimeDeep.npSeconds.typeface = App.typeFaceRancho
+        incTimeDeep.tvMins.typeface = App.typeFaceRancho
+        incTimeDeep.tvSecs.typeface = App.typeFaceRancho
+        incTimeDuration.npMinutes.typeface = App.typeFaceRancho
         incTimeDuration.npSeconds.typeface = App.typeFaceRancho
+        incTimeDuration.tvMins.typeface = App.typeFaceRancho
+        incTimeDuration.tvSecs.typeface = App.typeFaceRancho
     }
 
     private fun setOnClickListeners() {

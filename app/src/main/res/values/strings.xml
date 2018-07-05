@@ -3,8 +3,10 @@
     <string name="turn_timer">Turn Timer</string>
     <string name="share">Share App</string>
     <string name="back">back</string>
-    <string name="number_picker_formatter_min">%1$d min</string>
-    <string name="number_picker_formatter_sec">%1$d sec</string>
+    <string name="number_picker_formatter_min">%1$d</string>
+    <string name="number_picker_formatter_sec">%1$d</string>
+    <string name="min">mins</string>
+    <string name="sec">secs</string>
     <string name="beep_before_round_ends">Beep before round ends</string>
     <string name="round_duration">Round duration</string>
     <string name="share_description">ANODA Turn Timer. Enjoy games with friends \n http://itunes.apple.com/app/id1282215925</string>

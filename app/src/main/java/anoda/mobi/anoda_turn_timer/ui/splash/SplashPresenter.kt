@@ -12,8 +12,7 @@ import java.util.concurrent.TimeUnit
 class SplashPresenter : MvpPresenter<SplashView>() {
 
     companion object {
-        private const val START_DELAY: Long = 1300
-        const val DURATION_ANIMATE: Long = 1000
+        private const val START_DELAY: Long = 500
     }
 
     private lateinit var startJob: Job
@@ -24,7 +23,6 @@ class SplashPresenter : MvpPresenter<SplashView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        startAnimation()
         startTimeAndStartNextActivity()
     }
 
@@ -33,10 +31,6 @@ class SplashPresenter : MvpPresenter<SplashView>() {
             delay(START_DELAY, TimeUnit.MILLISECONDS)
             viewState.startTimerActivity()
         }
-    }
-
-    private fun startAnimation() {
-        viewState.startAnimation()
     }
 
     private fun startTimeAndStartNextActivity() {

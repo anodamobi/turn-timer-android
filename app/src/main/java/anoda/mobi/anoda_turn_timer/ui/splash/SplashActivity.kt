@@ -24,10 +24,4 @@ class SplashActivity : MvpAppCompatActivity(), SplashView {
         startActivity(TimerActivity.getStartIntent(this))
         finish()
     }
-
-    override fun startAnimation() {
-        val rotate = RotateAnimation(180f, 360f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f)
-        rotate.duration = SplashPresenter.DURATION_ANIMATE
-        ivHourglass.startAnimation(rotate)
-    }
 }

@@ -36,6 +36,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     override fun attachView(view: SettingsView?) {
         super.attachView(view)
         onGettingActualTime()
+        SharedPreferencesManager.setTimeChanged(context, false)
     }
 
     override fun detachView(view: SettingsView?) {
@@ -51,12 +52,18 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     }
 
     private fun saveTimeToPrefs() {
-        val mainTimerSeconds = roundDurationMinutes * SECONDS_IN_MINUTE + roundDurationSeconds
+        val newMainTimerSeconds = roundDurationMinutes * SECONDS_IN_MINUTE + roundDurationSeconds
         var secondTimerSeconds = beepTimeMinutes * SECONDS_IN_MINUTE + beepTimeSeconds
-        if (secondTimerSeconds > mainTimerSeconds) {
-            secondTimerSeconds = mainTimerSeconds
+        if (secondTimerSeconds > newMainTimerSeconds) {
+            secondTimerSeconds = newMainTimerSeconds
         }
-        SharedPreferencesManager.saveMainTimerTime(context, mainTimerSeconds)
+
+        val previousMainTimerValue = SharedPreferencesManager.loadMainTimerTime(context)
+        if (previousMainTimerValue != newMainTimerSeconds) {
+            SharedPreferencesManager.setTimeChanged(context, true)
+        }
+
+        SharedPreferencesManager.saveMainTimerTime(context, newMainTimerSeconds)
         SharedPreferencesManager.saveSecondaryTimerTime(context, secondTimerSeconds)
     }
 

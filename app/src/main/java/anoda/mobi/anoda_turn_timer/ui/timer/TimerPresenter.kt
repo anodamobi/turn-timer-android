@@ -47,12 +47,31 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     override fun attachView(view: TimerView?) {
         super.attachView(view)
+        launch(UI) {
+            delay(READ_SETTINGS_DELAY, TimeUnit.MILLISECONDS)
+            checkIsShouldUpdateTimerText()
+            checkIsTimerStartedAndDurationChanged()
+        }
+    }
+
+    private fun checkIsShouldUpdateTimerText() {
         if (isTimerStarted.not() && isTimerPaused.not()) {
-            launch(UI) {
-                delay(READ_SETTINGS_DELAY, TimeUnit.MILLISECONDS)
-                val text = formatText(getTimeToEnd())
-                viewState.updateTimerText(text)
-            }
+            updateTimerText()
+        }
+    }
+
+    private fun updateTimerText() {
+        val text = formatText(getTimeToEnd())
+        viewState.updateTimerText(text)
+    }
+
+    private fun checkIsTimerStartedAndDurationChanged() {
+        if (SharedPreferencesManager.isTimeChanged(this@TimerPresenter.context) && (isTimerStarted || isTimerPaused)) {
+            mainTimerFinished()
+            updateTimerText()
+            viewState.updateTimerBackgroundProgress(ANGLES_IN_CIRCLE.toFloat())
+            viewState.showTimerInProgress()
+            SharedPreferencesManager.setTimeChanged(this@TimerPresenter.context, false)
         }
     }
 
@@ -137,6 +156,11 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     override fun onMainTimerFinished() {
+        mainTimerFinished()
+        viewState.playMainSignal()
+    }
+
+    private fun mainTimerFinished() {
         isTimerStarted = false
         isTimerPaused = false
 
@@ -144,8 +168,6 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showStartButton()
 
         innerElapsedTime = 0
-
-        viewState.playMainSignal()
     }
 
     override fun onNewTimerCycle(timeLeft: Long) {

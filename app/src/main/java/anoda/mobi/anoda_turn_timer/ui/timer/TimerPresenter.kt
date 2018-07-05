@@ -85,6 +85,9 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     fun onSettingsClick() {
+        if (isTimerStarted && isTimerPaused.not()) {
+            onPauseTimerClick()
+        }
         viewState.startSettingsActivity()
     }
 
@@ -98,6 +101,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
         aTimer.startTimer(getTimeToEnd(), getTimeToEndPlaySignal())
         setTimeToEnd()
+        viewState.playMainSignal()
     }
 
     private fun resetTimer() {
@@ -112,7 +116,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         Timber.i("reset")
     }
 
-    private fun setTimeToEnd(){
+    private fun setTimeToEnd() {
         currentTimerTimeToEnd = getTimeToEnd()
     }
 
@@ -140,6 +144,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showStartButton()
 
         innerElapsedTime = 0
+
+        viewState.playMainSignal()
     }
 
     override fun onNewTimerCycle(timeLeft: Long) {
@@ -153,7 +159,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         val seconds = timeLeft - minutes * MINUTES_IN_HOUR
         return run {
             if (minutes > 0) {
-                return@run String.format(if (seconds > 10) "%d:%d" else "%d:0%d", minutes, seconds)
+                return@run String.format(if (seconds >= 10) "%d:%d" else "%d:0%d", minutes, seconds)
             }
             return@run "$seconds"
         }
@@ -170,6 +176,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     override fun onSecondaryTimerFinished() {
-        viewState.playSignal()
+        viewState.playSecondarySignal()
     }
+
+
 }

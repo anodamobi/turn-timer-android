@@ -20,7 +20,8 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         const val PAUSE_BUTTON = 1
         const val START_BUTTON = 0
 
-        const val SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.signal}"
+        const val MAIN_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.start_end}"
+        const val SECONDARY_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.alarm}"
     }
 
     @InjectPresenter
@@ -75,8 +76,12 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         }
     }
 
-    override fun playSignal() {
-        PlaySoundManager.playSound(this, SIGNAL_URI)
+    override fun playMainSignal() {
+        PlaySoundManager.playSound(this, MAIN_SIGNAL_URI)
+    }
+
+    override fun playSecondarySignal() {
+        PlaySoundManager.playSound(this, SECONDARY_SIGNAL_URI)
     }
 
     override fun updateTimerBackgroundProgress(angle: Float) {

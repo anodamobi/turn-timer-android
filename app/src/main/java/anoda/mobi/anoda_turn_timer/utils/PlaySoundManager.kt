@@ -7,18 +7,24 @@ import androidx.core.net.toUri
 
 object PlaySoundManager {
 
-    fun playSound(context: Context, uriStr: String) {
-        val uri = uriStr.toUri()
-        val mediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        mediaPlayer.setVolume(1f, 1f)
-        mediaPlayer.setDataSource(context, uri)
-        mediaPlayer.prepare()
-        mediaPlayer.start()
+    private var isPlayingSound = false
 
-        mediaPlayer.setOnCompletionListener {
-            it.start()
-            it.release()
+    fun playSound(context: Context, uriStr: String) {
+        if (isPlayingSound.not()) {
+            isPlayingSound = true
+            val uri = uriStr.toUri()
+            val mediaPlayer = MediaPlayer()
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            mediaPlayer.setVolume(1f, 1f)
+            mediaPlayer.setDataSource(context, uri)
+            mediaPlayer.prepare()
+            mediaPlayer.start()
+
+            mediaPlayer.setOnCompletionListener {
+                it.start()
+                it.release()
+                isPlayingSound = false
+            }
         }
     }
 }

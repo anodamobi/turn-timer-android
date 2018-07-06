@@ -49,6 +49,7 @@ ext {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compile project(':shared')
 
     testImplementation 'junit:junit:4.12'
     /* Mockito */

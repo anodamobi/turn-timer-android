@@ -5,22 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
+    android:background="@color/mainBackground"
     android:padding="@dimen/box_inset_layout_padding"
-    tools:context=".MainActivity"
+    tools:context=".ui.main.MainActivity"
     tools:deviceIds="wear">
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/inner_frame_layout_padding"
         app:boxedEdges="all">
 
         <TextView
-            android:id="@+id/text"
+            android:id="@+id/tvTimerText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/hello_world"/>
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorRed"
+            android:textSize="32sp"
+            android:textStyle="bold"/>
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="4dp"
+            android:background="@color/settingsBackground"
+            android:text="@string/settings"
+            android:textAllCaps="false"/>
+
+    </RelativeLayout>
 </android.support.wear.widget.BoxInsetLayout>

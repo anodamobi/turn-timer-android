@@ -1,10 +1,14 @@
 package anoda.mobi.anoda_turn_timer.ui.main
 
+import android.content.Context
+import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.utils.ATimer
 import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
+import anoda.mobi.anoda_turn_timer.utils.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @InjectViewState
 class MainPresenter : MvpPresenter<MainView>(), ATimerInteraction {
@@ -17,14 +21,21 @@ class MainPresenter : MvpPresenter<MainView>(), ATimerInteraction {
     private var isTimerPaused = false
     private var aTimer: ATimer = ATimer(this)
 
+    init {
+        App.appComponent.inject(this)
+    }
+
+    @Inject
+    lateinit var context: Context
+
     fun onSettingsClick() {
         viewState.startSettingsActivity()
     }
 
-    override fun onDestroy() {
+    override fun detachView(view: MainView?) {
         if (isTimerStarted || isTimerPaused)
             aTimer.stopTimer()
-        super.onDestroy()
+        super.detachView(view)
     }
 
     fun onTimerClick() {
@@ -47,9 +58,10 @@ class MainPresenter : MvpPresenter<MainView>(), ATimerInteraction {
     private fun updateTimerText() {
         val text = formatText(getTimeToEnd())
         viewState.updateTimerText(text)
+        viewState.showTimerPauseProgress()
     }
 
-    private fun getTimeToEnd() = 10L
+    private fun getTimeToEnd() = SharedPreferencesManager.loadMainTimerTime(context).toLong()
 
     private fun getTimeToEndPlaySignal() = 0L
 

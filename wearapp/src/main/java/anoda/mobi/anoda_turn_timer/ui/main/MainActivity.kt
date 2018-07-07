@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.base.MvpWearableActivity
+import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,6 +23,7 @@ class MainActivity : MvpWearableActivity(), MainView {
     private fun init() {
         // Enables Always-on
         setAmbientEnabled()
+
         btnSettings.setOnClickListener { presenter.onSettingsClick() }
         tvTimerText.setOnClickListener { presenter.onTimerClick() }
     }
@@ -52,6 +54,6 @@ class MainActivity : MvpWearableActivity(), MainView {
     }
 
     override fun startSettingsActivity() {
-
+        startActivity(SettingsActivity.getStartIntent(this))
     }
 }

@@ -178,7 +178,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     private fun formatText(timeLeft: Long): String {
         val minutes = TimeUnit.SECONDS.toMinutes(timeLeft)
-        val seconds = timeLeft - minutes * MINUTES_IN_HOUR
+        val seconds = timeLeft - minutes * SECONDS_IN_MINUTE
         return run {
             if (minutes > 0) {
                 return@run String.format(if (seconds >= 10) "%d:%d" else "%d:0%d", minutes, seconds)

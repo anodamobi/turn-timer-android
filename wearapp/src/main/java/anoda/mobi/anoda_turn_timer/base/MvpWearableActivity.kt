@@ -55,10 +55,14 @@ open class MvpWearableActivity : WearableActivity() {
      * @return The [MvpDelegate] being used by this Activity.
      */
     fun getMvpDelegate(): MvpDelegate<out MvpWearableActivity> {
-        if (mMvpDelegate == null) {
-            mMvpDelegate = MvpDelegate<MvpWearableActivity>(this)
+        val immutableDelegate = mMvpDelegate
+        return if (immutableDelegate == null) {
+            val initializedDelegate = MvpDelegate<MvpWearableActivity>(this)
+            mMvpDelegate = initializedDelegate
+            initializedDelegate
+        } else {
+            immutableDelegate
         }
-        return mMvpDelegate!!
     }
 
 }

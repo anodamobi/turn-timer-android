@@ -8,61 +8,84 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import anoda.mobi.anoda_turn_timer.R
-import timber.log.Timber
 
 class TimerProgressBackgroundView
 @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
 
     companion object {
-        private val SWEEP_INC = 360f
-        private val START_INC = 270f
+        private const val SWEEP_INC = 360f
+        private const val START_INC = 270f
+        private const val STROKE_WIDTH = 32f
+        private const val LEFT_COORDINATE = 25f
+        private const val RIGHT_COORDINATE = 25f
+        private const val BOTTOM_SIDE_COEFFICIENT = 25f
+        private const val RIGHT_SIDE_COEFFICIENT = 25f
+        private const val RADIUS_COEFFICIENT = 25f
     }
 
-    private var paint: Paint = Paint()
-    private lateinit var rectF: RectF
-    private var angle: Float = 0f
+    private lateinit var mCircleRectF: RectF
 
-    private var circleCenterX: Float = 0f
-    private var circleCenterY: Float = 0f
-    private var circleRadius: Float = 0f
+    private var mCircleBackgroundPaint: Paint = Paint()
+    private var mCircleStrokePaint: Paint = Paint()
+    private var mRectWidth: Int = 0
+    private var mRectHeight: Int = 0
+    private var mAngle: Float = 0f
+
+    private var mCircleCenterX: Float = 0f
+    private var mCircleCenterY: Float = 0f
+    private var mCircleRadius: Float = 0f
 
     private var isRectFInitialized = false
 
     init {
-        paint.isAntiAlias = true
-
-        angle = SWEEP_INC
+        initCircleBackground()
+        initCircleStroke()
+        mAngle = SWEEP_INC
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val width = MeasureSpec.getSize(widthMeasureSpec)
-        val height = MeasureSpec.getSize(heightMeasureSpec)
-        Timber.i("onMeasure spec $width, $height")
-        if (isRectFInitialized.not()) {
-            rectF = RectF(0f, 0f, width.toFloat(), height.toFloat())
-            circleCenterX = width.toFloat() / 2
-            circleCenterY = height.toFloat() / 2
-            circleRadius = ((circleCenterX + circleCenterY) / 2) - 10
-            isRectFInitialized = true
-        }
-    }
+        mRectWidth = MeasureSpec.getSize(widthMeasureSpec)
+        mRectHeight = MeasureSpec.getSize(heightMeasureSpec)
+        createCircleProgressBarFrame()
 
-    public fun update(newAngle: Float) {
-        angle = newAngle
-        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
-        paint.style = Paint.Style.FILL
-        paint.color = ContextCompat.getColor(context, R.color.smallCircleColor)
-        canvas.drawArc(rectF, START_INC, angle, true, paint)
-
-        //draw outer circle
-        paint.strokeWidth = 16f
-        paint.style = Paint.Style.STROKE
-        paint.color = ContextCompat.getColor(context, R.color.largeCircleColor)
-        canvas.drawCircle(circleCenterX, circleCenterY, circleRadius, paint)
+        canvas.drawCircle(mCircleCenterX, mCircleCenterY, mCircleRadius, mCircleBackgroundPaint)
+        canvas.drawArc(mCircleRectF, START_INC, mAngle, false, mCircleStrokePaint)
     }
 
+    fun update(newAngle: Float) {
+        mAngle = newAngle
+        invalidate()
+    }
+
+    private fun initCircleBackground() {
+        mCircleBackgroundPaint.isAntiAlias = true
+        mCircleBackgroundPaint.strokeWidth = STROKE_WIDTH
+        mCircleBackgroundPaint.style = Paint.Style.STROKE
+        mCircleBackgroundPaint.color = ContextCompat.getColor(context, R.color.circleBackgroundColor)
+    }
+
+    private fun initCircleStroke() {
+        mCircleStrokePaint.isAntiAlias = true
+        mCircleStrokePaint.style = Paint.Style.STROKE
+        mCircleStrokePaint.strokeWidth = STROKE_WIDTH
+        mCircleStrokePaint.strokeCap = Paint.Cap.ROUND
+        mCircleStrokePaint.color = ContextCompat.getColor(context, R.color.circleStrokeColor)
+    }
+
+    private fun createCircleProgressBarFrame() {
+        if (isRectFInitialized.not()) {
+            mCircleRectF = RectF(LEFT_COORDINATE,
+                    RIGHT_COORDINATE,
+                    width.toFloat() - RIGHT_SIDE_COEFFICIENT,
+                    height.toFloat() - BOTTOM_SIDE_COEFFICIENT)
+            mCircleCenterX = width.toFloat() / 2
+            mCircleCenterY = height.toFloat() / 2
+            mCircleRadius = ((mCircleCenterX + mCircleCenterY) / 2) - RADIUS_COEFFICIENT
+            isRectFInitialized = true
+        }
+    }
 }

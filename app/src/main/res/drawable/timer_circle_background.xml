@@ -3,7 +3,7 @@
     <item>
         <shape
             android:shape="oval">
-            <solid android:color="@color/smallCircleColor"/>
+            <solid android:color="@color/circleBackgroundColor"/>
         </shape>
     </item>
     <item>
@@ -11,7 +11,7 @@
             android:shape="oval">
             <stroke
                 android:width="8dp"
-                android:color="@color/largeCircleColor"/>
+                android:color="@color/circleBackgroundColor"/>
         </shape>
     </item>
 </layer-list>

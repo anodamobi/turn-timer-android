@@ -1,81 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
     android:fitsSystemWindows="true">
 
-    <ImageView
-        android:id="@+id/ivBack"
-        android:layout_width="@dimen/circle_button_size"
-        android:layout_height="@dimen/circle_button_size"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/back"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ivShare"
-        android:layout_width="@dimen/circle_button_size"
-        android:layout_height="@dimen/circle_button_size"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/share"
-        android:src="@drawable/ic_share"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constTimer"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_marginTop="101dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/tvTitleTime"
+            android:id="@+id/tvRoundDuration"
             style="@style/TitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="88dp"
-            android:text="@string/round_duration" />
+            android:text="@string/round_duration"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <include
-            android:id="@+id/incTimeDuration"
-            layout="@layout/part_time"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp" />
+        <FrameLayout
+            android:id="@+id/fmDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_background_oval"
+            app:layout_constraintTop_toBottomOf="@id/tvRoundDuration">
+
+            <EditText
+                android:id="@+id/etRoundDuration"
+                style="@style/EditTextStandard.EditTimerStyle"
+                android:layout_width="189dp"
+                android:layout_height="83dp"
+                tools:text="01:00" />
+
+        </FrameLayout>
 
         <TextView
-            android:id="@+id/tvTitleTimeDeep"
+            android:id="@+id/tvBeepTime"
             style="@style/TitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="@string/beep_before_round_ends"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fmDuration" />
+
+        <FrameLayout
+            android:id="@+id/fmBeepTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/beep_before_round_ends" />
+            android:background="@drawable/ic_background_oval"
+            app:layout_constraintTop_toBottomOf="@id/tvBeepTime">
 
-        <include
-            android:id="@+id/incTimeDeep"
-            layout="@layout/part_time"
-            android:layout_width="match_parent"
-            android:layout_height="170dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etBeepTime"
+                style="@style/EditTextStandard.EditTimerStyle"
+                android:layout_width="189dp"
+                android:layout_height="83dp"
+                tools:text="01:00" />
+        </FrameLayout>
+    </android.support.constraint.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="165dp"
-        android:layout_height="60dp"
-        android:layout_marginBottom="20dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/developed_by"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="@id/constTimer"
+        app:layout_constraintStart_toStartOf="@id/constTimer"
+        app:layout_constraintTop_toBottomOf="@id/constTimer">
+
+        <FrameLayout
+            android:id="@+id/flBackButton"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@drawable/ic_background_oval">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivBackButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_arrow_back" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/flBShareButton"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginStart="191dp"
+            android:background="@drawable/ic_background_oval"
+            app:layout_constraintStart_toEndOf="@id/flBackButton">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivShareButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_share" />
+        </FrameLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

@@ -9,6 +9,7 @@ import anoda.mobi.anoda_turn_timer.utils.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
+import org.jetbrains.anko.share
 
 class TimerActivity : MvpAppCompatActivity(), TimerView {
 
@@ -19,6 +20,8 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         const val TIMER_END_PROGRESS = 1
         const val PAUSE_BUTTON = 1
         const val START_BUTTON = 0
+        const val RESET_BUTTON = 0
+        const val SHARE_BUTTON = 1
 
         const val MAIN_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.start_end}"
         const val SECONDARY_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.alarm}"
@@ -35,11 +38,12 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     private fun init() {
+        ivBtnReset.setOnClickListener { presenter.onResetTimerClick() }
         ivSettings.setOnClickListener { presenter.onSettingsClick() }
         ivStart.setOnClickListener { presenter.onStartTimerClick() }
         ivPause.setOnClickListener { presenter.onPauseTimerClick() }
-        tvTimerText.setOnClickListener { presenter.onTimerTextClick() }
         ivReset.setOnClickListener { presenter.onResetTimerClick() }
+        ivShare.setOnClickListener { presenter.onShareTimerClick() }
     }
 
     override fun startSettingsActivity() {
@@ -60,13 +64,15 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
 
     override fun showTimerInProgress() {
         runOnUiThread {
-            vsTimerReset.displayedChild = TIMER_IN_PROGRESS
+            vsTimerButtons.displayedChild = TIMER_IN_PROGRESS
+            vsActionResetButtons.displayedChild = RESET_BUTTON
         }
     }
 
     override fun showTimerEndProgress() {
         runOnUiThread {
-            vsTimerReset.displayedChild = TIMER_END_PROGRESS
+            vsTimerButtons.displayedChild = TIMER_END_PROGRESS
+            vsActionResetButtons.displayedChild = SHARE_BUTTON
         }
     }
 
@@ -74,6 +80,10 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         runOnUiThread {
             tvTimerText.text = text
         }
+    }
+
+    override fun shareApp() {
+        share(getString(R.string.share_description))
     }
 
     override fun playMainSignal() {

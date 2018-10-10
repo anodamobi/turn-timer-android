@@ -1,19 +1,18 @@
 package anoda.mobi.anoda_turn_timer
 
 import android.app.Application
-import android.graphics.Typeface
-import android.support.v4.content.res.ResourcesCompat
 import anoda.mobi.anoda_turn_timer.di.AppModule
 import anoda.mobi.anoda_turn_timer.di.ApplicationComponent
 import anoda.mobi.anoda_turn_timer.di.DaggerApplicationComponent
-import timber.log.Timber
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
+import timber.log.Timber
 
 class App : Application() {
     companion object {
-        var typeFaceRancho: Typeface? = null
+        // todo clear that file
+//        var typeFaceRancho: Typeface? = null
 
         lateinit var appComponent: ApplicationComponent
             private set
@@ -29,13 +28,13 @@ class App : Application() {
             initTimber()
         }
 
-        initializeTypeFaces()
+//        initializeTypeFaces()
 
     }
 
-    private fun initializeTypeFaces() {
-        typeFaceRancho = ResourcesCompat.getFont(this, R.font.rancho_regular)
-    }
+//    private fun initializeTypeFaces() {
+//        typeFaceRancho = ResourcesCompat.getFont(this, R.font.rancho_regular)
+//    }
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())

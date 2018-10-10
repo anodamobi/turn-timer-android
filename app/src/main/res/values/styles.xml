@@ -9,9 +9,27 @@
     </style>
 
     <style name="TitleTextView" parent="android:Widget.TextView">
-        <item name="android:textColor">@color/veryLightPink</item>
+        <item name="android:textColor">@color/lightOrange</item>
         <item name="android:textSize">30sp</item>
-        <item name="android:fontFamily">@font/rancho_regular</item>
+        <item name="android:fontFamily">@font/passion_one_regular</item>
+    </style>
+
+    <style name="EditTextStandard" parent="Widget.AppCompat.EditText" />
+
+    <style name="EditTextStandard.EditTimerStyle">
+        <item name="android:layout_marginStart">@dimen/settings_et_margin_start_end</item>
+        <item name="android:layout_marginTop">@dimen/settings_et_margin_bottom_top</item>
+        <item name="android:layout_marginEnd">@dimen/settings_et_margin_start_end</item>
+        <item name="android:layout_marginBottom">@dimen/settings_et_margin_bottom_top</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textSize">75sp</item>
+        <item name="android:textColor">@color/lightOrange</item>
+        <item name="android:fontFamily">@font/passion_one_regular</item>
+        <item name="android:textCursorDrawable">@drawable/ic_edit_text_cursor</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:maxLength">5</item>
+        <item name="android:inputType">numberSigned</item>
     </style>
 
     <style name="NumberPicker">

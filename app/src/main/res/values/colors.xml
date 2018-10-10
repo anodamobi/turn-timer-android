@@ -4,11 +4,13 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="largeCircleColor">#66FFFFFF</color>
-    <color name="smallCircleColor">#40FFFFFF</color>
-    <color name="veryLightPink">#fdf5eb</color>
+    <color name="circleBackgroundColor">#e7e7e7</color>
+    <color name="lightOrange">#ffa03a</color>
+    <color name="circleStrokeColor">@color/lightOrange</color>
+    <color name="backgroundOvalColor">#19ffa03a</color>
+
+    <!--<color name="veryLightPink">#fdf5eb</color>-->
     <color name="warmGrey">#979797</color>
     <color name="slateGrey">#596274</color>
-    <color name="background_orange">#F58B44</color>
 
 </resources>

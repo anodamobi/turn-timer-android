@@ -73,7 +73,7 @@ class ATimer(val timerInteraction: ATimerInteraction) {
     private lateinit var timer: Timer
     private val timerStateManager = ATimerStateManager()
 
-    public fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+    fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         if (secondsToEnd < 0 || secondsSecondaryBeforeEnd < 0) {
             throw IllegalArgumentException("Seconds can't be negative")
         }
@@ -87,13 +87,13 @@ class ATimer(val timerInteraction: ATimerInteraction) {
         }
     }
 
-    public fun resumeTimer() {
+    fun resumeTimer() {
         timerStateManager.restoreState()
 
         startTimer(timerStateManager.secondsToEnd, timerStateManager.secondsSecondaryBeforeEnd)
     }
 
-    public fun pauseTimer() {
+    fun pauseTimer() {
         timer.cancel()
         timer.purge()
 
@@ -103,14 +103,14 @@ class ATimer(val timerInteraction: ATimerInteraction) {
         timerStateManager.setTimerFinished()
     }
 
-    public fun stopTimer() {
+    fun stopTimer() {
         timer.cancel()
         timer.purge()
         timerInteraction.onMainTimerFinished()
         timerStateManager.reset()
     }
 
-    public fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+    fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         stopTimer()
         startTimer(secondsToEnd, secondsSecondaryBeforeEnd)
     }
@@ -121,11 +121,11 @@ class ATimer(val timerInteraction: ATimerInteraction) {
 
         timer.schedule(object : TimerTask() {
             override fun run() {
-                timerStateManager.incrementElapsedTime()
                 if (timerStateManager.isMainTimerFinished()) {
                     stopTimer()
                     return
                 }
+                timerStateManager.incrementElapsedTime()
                 if (timerStateManager.isSecondaryTimerFinished()) {
                     timerInteraction.onSecondaryTimerFinished()
                 }

@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">ANODA-Turn-Timer</string>
     <string name="turn_timer">Turn Timer</string>
-    <string name="share">Share App</string>
-    <string name="back">back</string>
-    <string name="number_picker_formatter_min">%1$d</string>
-    <string name="number_picker_formatter_sec">%1$d</string>
-    <string name="min">mins</string>
-    <string name="sec">secs</string>
+    <string name="description_settings">Open App Settings</string>
+    <string name="description_share">Share App</string>
+    <string name="description_back">Go back</string>
+    <string name="description_start">Start timer</string>
+    <string name="description_pause">Pause timer</string>
+    <string name="description_restart">Restart timer</string>
     <string name="beep_before_round_ends">Beep before round ends</string>
     <string name="round_duration">Round duration</string>
     <string name="share_description">ANODA Turn Timer. Enjoy games with friends \n http://itunes.apple.com/app/id1282215925</string>

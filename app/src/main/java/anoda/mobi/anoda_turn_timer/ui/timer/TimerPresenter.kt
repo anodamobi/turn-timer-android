@@ -110,6 +110,10 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.startSettingsActivity()
     }
 
+    fun onShareTimerClick() {
+        viewState.shareApp()
+    }
+
     private fun startTimer() {
         isTimerStarted = true
         isTimerPaused = false

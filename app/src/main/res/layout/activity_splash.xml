@@ -4,44 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
-    tools:context=".ui.splash.SplashActivity"
-    android:fitsSystemWindows="true">
-
+    android:fitsSystemWindows="true"
+    tools:context=".ui.splash.SplashActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvAppName"
         style="@style/TitleTextView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="55dp"
         android:text="@string/turn_timer"
-        android:textColor="@android:color/white"
-        android:textSize="75sp"
+        android:textColor="@color/lightOrange"
+        android:textSize="60sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/ivHourglass"
-        android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_width="123dp"
+        android:layout_height="216dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@null"
         app:layout_constraintBottom_toTopOf="@+id/ivLogo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.426"
-        app:srcCompat="@drawable/ic_hourglass" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAppName"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
-    <ImageView
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/ivLogo"
-        android:layout_width="160dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="165dp"
+        android:layout_height="59dp"
+        android:layout_marginBottom="30dp"
+        android:contentDescription="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/developed_by" />
+        app:srcCompat="@drawable/ic_company_logo" />
 </android.support.constraint.ConstraintLayout>

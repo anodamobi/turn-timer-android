@@ -3,7 +3,7 @@ package anoda.mobi.anoda_turn_timer.ui.settings
 import android.content.Context
 import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.ui.timer.TimerPresenter.Companion.SECONDS_IN_MINUTE
-import anoda.mobi.anoda_turn_timer.utils.SharedPreferencesManager
+import anoda.mobi.anoda_turn_timer.util.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import javax.inject.Inject
@@ -12,12 +12,12 @@ import javax.inject.Inject
 class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     @Inject
-    lateinit var context: Context
+    lateinit var mContext: Context
 
-    private var beepTimeMinutes = 0
-    private var beepTimeSeconds = 0
-    private var roundDurationMinutes = 0
-    private var roundDurationSeconds = 0
+    private var mBeepTimeMinutes = 0
+    private var mBeepTimeSeconds = 0
+    private var mRoundDurationMinutes = 0
+    private var mRoundDurationSeconds = 0
 
     init {
         App.appComponent.inject(this)
@@ -36,7 +36,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     override fun attachView(view: SettingsView?) {
         super.attachView(view)
         onGettingActualTime()
-        SharedPreferencesManager.setTimeChanged(context, false)
+        SharedPreferencesManager.setTimeChanged(mContext, false)
     }
 
     override fun detachView(view: SettingsView?) {
@@ -45,48 +45,49 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     }
 
     private fun getBeforeSetTime() {
-        beepTimeMinutes = SharedPreferencesManager.loadSecondaryTimerTime(context) / SECONDS_IN_MINUTE
-        beepTimeSeconds = SharedPreferencesManager.loadSecondaryTimerTime(context) - (beepTimeMinutes * SECONDS_IN_MINUTE)
-        roundDurationMinutes = SharedPreferencesManager.loadMainTimerTime(context) / SECONDS_IN_MINUTE
-        roundDurationSeconds = SharedPreferencesManager.loadMainTimerTime(context) - (roundDurationMinutes * SECONDS_IN_MINUTE)
+        mBeepTimeMinutes = SharedPreferencesManager.loadSecondaryTimerTime(mContext) / SECONDS_IN_MINUTE
+        mBeepTimeSeconds = SharedPreferencesManager.loadSecondaryTimerTime(mContext) - (mBeepTimeMinutes * SECONDS_IN_MINUTE)
+        mRoundDurationMinutes = SharedPreferencesManager.loadMainTimerTime(mContext) / SECONDS_IN_MINUTE
+        mRoundDurationSeconds = SharedPreferencesManager.loadMainTimerTime(mContext) - (mRoundDurationMinutes * SECONDS_IN_MINUTE)
     }
 
     private fun saveTimeToPrefs() {
-        val newMainTimerSeconds = roundDurationMinutes * SECONDS_IN_MINUTE + roundDurationSeconds
-        var secondTimerSeconds = beepTimeMinutes * SECONDS_IN_MINUTE + beepTimeSeconds
+        val newMainTimerSeconds = mRoundDurationMinutes * SECONDS_IN_MINUTE + mRoundDurationSeconds
+        var secondTimerSeconds = mBeepTimeMinutes * SECONDS_IN_MINUTE + mBeepTimeSeconds
         if (secondTimerSeconds > newMainTimerSeconds) {
             secondTimerSeconds = newMainTimerSeconds
         }
 
-        val previousMainTimerValue = SharedPreferencesManager.loadMainTimerTime(context)
+        val previousMainTimerValue = SharedPreferencesManager.loadMainTimerTime(mContext)
         if (previousMainTimerValue != newMainTimerSeconds) {
-            SharedPreferencesManager.setTimeChanged(context, true)
+            SharedPreferencesManager.setTimeChanged(mContext, true)
         }
 
-        SharedPreferencesManager.saveMainTimerTime(context, newMainTimerSeconds)
-        SharedPreferencesManager.saveSecondaryTimerTime(context, secondTimerSeconds)
+        SharedPreferencesManager.saveMainTimerTime(mContext, newMainTimerSeconds)
+        SharedPreferencesManager.saveSecondaryTimerTime(mContext, secondTimerSeconds)
     }
 
     fun onChangeBeepTimeMinutes(minutes: Int) {
-        beepTimeMinutes = minutes
+        mBeepTimeMinutes = minutes
         setBeforeBeepTime()
     }
 
     fun onChangeBeepTimeSecond(seconds: Int) {
-        beepTimeSeconds = seconds
+        mBeepTimeSeconds = seconds
         setBeforeBeepTime()
     }
 
     fun onChangeRoundDurationTimeMinutes(minutes: Int) {
-        roundDurationMinutes = minutes
+        mRoundDurationMinutes = minutes
         setRoundDurationTime()
     }
 
     fun onChangeRoundDurationTimeSecond(seconds: Int) {
-        roundDurationSeconds = seconds
+        mRoundDurationSeconds = seconds
         setRoundDurationTime()
     }
 
-    private fun setRoundDurationTime() = viewState.setRoundDuration(roundDurationMinutes, roundDurationSeconds)
-    private fun setBeforeBeepTime() = viewState.setBeforeBeepTime(beepTimeMinutes, beepTimeSeconds)
+    private fun setRoundDurationTime() = viewState.setRoundDuration(mRoundDurationMinutes, mRoundDurationSeconds)
+
+    private fun setBeforeBeepTime() = viewState.setBeforeBeepTime(mBeepTimeMinutes, mBeepTimeSeconds)
 }

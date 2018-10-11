@@ -1,4 +1,4 @@
-package anoda.mobi.anoda_turn_timer.utils
+package anoda.mobi.anoda_turn_timer.util
 
 import java.util.*
 

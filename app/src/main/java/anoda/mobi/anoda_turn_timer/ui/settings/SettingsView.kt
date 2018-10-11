@@ -9,6 +9,8 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 interface SettingsView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun showShareAppVariant()
+
     fun setRoundDuration(minutes: Int, seconds: Int)
+
     fun setBeforeBeepTime(minutes: Int, seconds: Int)
 }

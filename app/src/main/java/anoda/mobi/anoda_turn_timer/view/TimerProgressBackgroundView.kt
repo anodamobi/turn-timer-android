@@ -48,7 +48,6 @@ class TimerProgressBackgroundView
         mRectWidth = MeasureSpec.getSize(widthMeasureSpec)
         mRectHeight = MeasureSpec.getSize(heightMeasureSpec)
         createCircleProgressBarFrame()
-
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -80,10 +79,10 @@ class TimerProgressBackgroundView
         if (isRectFInitialized.not()) {
             mCircleRectF = RectF(LEFT_COORDINATE,
                     RIGHT_COORDINATE,
-                    width.toFloat() - RIGHT_SIDE_COEFFICIENT,
-                    height.toFloat() - BOTTOM_SIDE_COEFFICIENT)
-            mCircleCenterX = width.toFloat() / 2
-            mCircleCenterY = height.toFloat() / 2
+                    mRectWidth.toFloat() - RIGHT_SIDE_COEFFICIENT,
+                    mRectHeight.toFloat() - BOTTOM_SIDE_COEFFICIENT)
+            mCircleCenterX = mRectWidth.toFloat() / 2
+            mCircleCenterY = mRectHeight.toFloat() / 2
             mCircleRadius = ((mCircleCenterX + mCircleCenterY) / 2) - RADIUS_COEFFICIENT
             isRectFInitialized = true
         }

@@ -2,9 +2,9 @@ package anoda.mobi.anoda_turn_timer.ui.main
 
 import android.content.Context
 import anoda.mobi.anoda_turn_timer.App
-import anoda.mobi.anoda_turn_timer.utils.ATimer
-import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
-import anoda.mobi.anoda_turn_timer.utils.SharedPreferencesManager
+import anoda.mobi.anoda_turn_timer.util.ATimer
+import anoda.mobi.anoda_turn_timer.util.ATimerInteraction
+import anoda.mobi.anoda_turn_timer.util.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import java.util.concurrent.TimeUnit

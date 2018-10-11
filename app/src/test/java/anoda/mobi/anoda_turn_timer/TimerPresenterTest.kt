@@ -24,7 +24,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = Mockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -41,7 +41,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -61,7 +61,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -81,7 +81,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -99,7 +99,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -117,7 +117,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -137,7 +137,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -157,7 +157,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -176,7 +176,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -196,7 +196,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 
@@ -218,7 +218,7 @@ class TimerPresenterTest {
         val timerViewState = Mockito.mock(`TimerView$$State`::class.java)
         val presenter = PowerMockito.mock(TimerPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(timerViewState)
         presenter.attachView(timerView)
 

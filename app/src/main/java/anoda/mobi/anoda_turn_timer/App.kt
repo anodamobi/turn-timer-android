@@ -11,9 +11,6 @@ import timber.log.Timber
 
 class App : Application() {
     companion object {
-        // todo clear that file
-//        var typeFaceRancho: Typeface? = null
-
         lateinit var appComponent: ApplicationComponent
             private set
     }
@@ -27,14 +24,7 @@ class App : Application() {
         if (BuildConfig.DEBUG) {
             initTimber()
         }
-
-//        initializeTypeFaces()
-
     }
-
-//    private fun initializeTypeFaces() {
-//        typeFaceRancho = ResourcesCompat.getFont(this, R.font.rancho_regular)
-//    }
 
     private fun initTimber() {
         Timber.plant(Timber.DebugTree())

@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
-import anoda.mobi.anoda_turn_timer.utils.PlaySoundManager
+import anoda.mobi.anoda_turn_timer.util.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -28,7 +28,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     @InjectPresenter
-    lateinit var presenter: TimerPresenter
+    lateinit var mPresenter: TimerPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +38,12 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     private fun init() {
-        ivBtnReset.setOnClickListener { presenter.onResetTimerClick() }
-        ivSettings.setOnClickListener { presenter.onSettingsClick() }
-        ivStart.setOnClickListener { presenter.onStartTimerClick() }
-        ivPause.setOnClickListener { presenter.onPauseTimerClick() }
-        ivReset.setOnClickListener { presenter.onResetTimerClick() }
-        ivShare.setOnClickListener { presenter.onShareTimerClick() }
+        ivBtnReset.setOnClickListener { mPresenter.onResetTimerClick() }
+        ivSettings.setOnClickListener { mPresenter.onSettingsClick() }
+        ivStart.setOnClickListener { mPresenter.onStartTimerClick() }
+        ivPause.setOnClickListener { mPresenter.onPauseTimerClick() }
+        ivReset.setOnClickListener { mPresenter.onResetTimerClick() }
+        ivShare.setOnClickListener { mPresenter.onShareTimerClick() }
     }
 
     override fun startSettingsActivity() {

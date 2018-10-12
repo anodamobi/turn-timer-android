@@ -9,27 +9,32 @@ repositories {
 }
 
 android {
+    signingConfigs {
+        release {
+            keyAlias 'turn_timer_android'
+            keyPassword '9kB4M2Anoda18'
+            storeFile file('../keystore/turn_timer_key')
+            storePassword '34VbM9d1Xc2z'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "anoda.mobi.anoda_turn_timer"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
     dependencies {
         kapt "com.android.databinding:compiler:3.2.0-alpha10"
     }
-
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -50,7 +55,7 @@ ext {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':shared')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
 
@@ -62,15 +67,19 @@ dependencies {
     // Anko
     implementation "org.jetbrains.anko:anko:$ankoVersion"
     implementation "org.jetbrains.anko:anko-coroutines:$ankoVersion"
+
     // Timber
     implementation "com.jakewharton.timber:timber:$timber"
+
     // Moxy
     implementation "com.arello-mobile:moxy:$moxyVersion"
     implementation "com.arello-mobile:moxy-android:$moxyVersion"
     implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
     kapt "com.arello-mobile:moxy-compiler:$moxyVersion"
+
     // Number picker
     implementation "com.shawnlin:number-picker:$numberPicker"
+
     // Dagger 2
     implementation "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
@@ -81,6 +90,7 @@ dependencies {
 
     // TESTS
     testImplementation "junit:junit:$jUnit"
+
     // Mockito
     testImplementation "org.mockito:mockito-core:$mockito"
     testImplementation "org.mockito:mockito-inline:$mockito"
@@ -88,12 +98,15 @@ dependencies {
         exclude group: 'org.jetbrains.kotlin'
         exclude group: 'org.mockito'
     }
+
     // PowerMock
     testImplementation "org.powermock:powermock-api-mockito2:$powermock"
     testImplementation "org.powermock:powermock-module-junit4:$powermock"
+
     // Roboelectric
     testImplementation "org.robolectric:robolectric:$robolectric"
     testImplementation "org.hamcrest:hamcrest-all:$hamcrest"
+
     // Espresso
     androidTestImplementation "com.android.support.test:runner:$runner"
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso"

@@ -42,6 +42,7 @@
                     style="@style/EditTextStandard.EditTimerStyle"
                     android:layout_width="189dp"
                     android:layout_height="83dp"
+                    android:hint="@null"
                     tools:text="01:00" />
             </FrameLayout>
         </LinearLayout>
@@ -75,6 +76,7 @@
                     style="@style/EditTextStandard.EditTimerStyle"
                     android:layout_width="189dp"
                     android:layout_height="83dp"
+                    android:hint="@null"
                     tools:text="01:00" />
             </FrameLayout>
         </LinearLayout>
@@ -108,7 +110,7 @@
             android:id="@+id/flBShareButton"
             android:layout_width="75dp"
             android:layout_height="75dp"
-            android:layout_marginStart="191dp"
+            android:layout_marginStart="415dp"
             android:background="@drawable/ic_background_oval"
             app:layout_constraintStart_toEndOf="@id/flBackButton">
 

@@ -91,7 +91,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     fun onResetTimerClick() {
-        if (isTimerStarted || isTimerPaused) resetTimer()
+        if (isTimerStarted) resetTimer()
     }
 
     fun onTimerTextClick() {

@@ -38,7 +38,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     private fun init() {
-        ivBtnReset.setOnClickListener { mPresenter.onResetTimerClick() }
+        ivBtnReset.setOnClickListener { mPresenter.onTimerTextClick() }
         ivSettings.setOnClickListener { mPresenter.onSettingsClick() }
         ivStart.setOnClickListener { mPresenter.onStartTimerClick() }
         ivPause.setOnClickListener { mPresenter.onPauseTimerClick() }
@@ -83,7 +83,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun shareApp() {
-        share(getString(R.string.share_description))
+        share(String.format(getString(R.string.share_description), packageName))
     }
 
     override fun playMainSignal() {

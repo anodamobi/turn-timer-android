@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="circle_button_size">100dp</dimen>
+    <dimen name="circle_button_size_land">82dp</dimen>
     <dimen name="circle_button_size_horizontal">50dp</dimen>
     <dimen name="time_picker_oval_width">250dp</dimen>
     <dimen name="time_picker_oval_height">115dp</dimen>

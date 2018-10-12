@@ -36,6 +36,26 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
         setUIListeners()
     }
 
+    override fun onStop() {
+        saveRoundTime()
+        saveBeepTime()
+        super.onStop()
+    }
+
+    override fun showShareAppVariant() {
+        share(String.format(getString(R.string.share_description), packageName))
+    }
+
+    override fun setBeforeBeepTime(minutes: Int, seconds: Int) {
+        etBeepTime.text = getEditableTimeText("${minutesManager(minutes.toString())}:${minutesManager(seconds.toString())}")
+        etBeepTime.setSelection(etRoundDuration.text.length)
+    }
+
+    override fun setRoundDuration(minutes: Int, seconds: Int) {
+        etRoundDuration.text = getEditableTimeText("${minutesManager(minutes.toString())}:${minutesManager(seconds.toString())}")
+        etRoundDuration.setSelection(etRoundDuration.text.length)
+    }
+
     private fun setUIListeners() {
         etRoundDuration?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -84,20 +104,6 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
 
         ivBackButton.setOnClickListener { onBackPressed() }
         ivShareButton.setOnClickListener { mPresenter.onShareAppLink() }
-    }
-
-    override fun showShareAppVariant() {
-        share(String.format(getString(R.string.share_description), packageName))
-    }
-
-    override fun setBeforeBeepTime(minutes: Int, seconds: Int) {
-        etBeepTime.text = getEditableTimeText("${minutesManager(minutes.toString())}:${minutesManager(seconds.toString())}")
-        etBeepTime.setSelection(etRoundDuration.text.length)
-    }
-
-    override fun setRoundDuration(minutes: Int, seconds: Int) {
-        etRoundDuration.text = getEditableTimeText("${minutesManager(minutes.toString())}:${minutesManager(seconds.toString())}")
-        etRoundDuration.setSelection(etRoundDuration.text.length)
     }
 
     private fun maskCorrector(s: Editable) {

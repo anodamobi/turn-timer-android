@@ -21,8 +21,6 @@ interface TimerView : MvpView {
 
     fun updateTimerText(text: String)
 
-    fun shareApp()
-
     @StateStrategyType(SkipStrategy::class)
     fun playMainSignal()
 

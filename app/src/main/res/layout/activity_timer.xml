@@ -100,30 +100,16 @@
 
         </ViewSwitcher>
 
-        <ViewSwitcher
-            android:id="@+id/vsActionResetButtons"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivReset"
             android:layout_width="@dimen/circle_button_size_horizontal"
             android:layout_height="@dimen/circle_button_size_horizontal"
             android:layout_marginTop="38dp"
             android:layout_marginEnd="12dp"
+            android:contentDescription="@string/description_share"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivReset"
-                android:layout_width="@dimen/circle_button_size_horizontal"
-                android:layout_height="@dimen/circle_button_size_horizontal"
-                android:contentDescription="@string/description_restart"
-                app:srcCompat="@drawable/ic_reset_bg" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/ivShare"
-                android:layout_width="@dimen/circle_button_size_horizontal"
-                android:layout_height="@dimen/circle_button_size_horizontal"
-                android:contentDescription="@string/description_share"
-                app:srcCompat="@drawable/ic_share" />
-        </ViewSwitcher>
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_reset_bg" />
     </android.support.constraint.ConstraintLayout>
-
 
 </android.support.constraint.ConstraintLayout>

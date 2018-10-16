@@ -23,16 +23,6 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         App.appComponent.inject(this)
     }
 
-    fun onShareAppLink() {
-        viewState.showShareAppVariant()
-    }
-
-    private fun onGettingActualTime() {
-        getBeforeSetTime()
-        setBeforeBeepTime()
-        setRoundDurationTime()
-    }
-
     override fun attachView(view: SettingsView?) {
         super.attachView(view)
         onGettingActualTime()
@@ -42,6 +32,40 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     override fun detachView(view: SettingsView?) {
         saveTimeToPrefs()
         super.detachView(view)
+    }
+
+    fun onShareAppLink() {
+        viewState.showShareAppVariant()
+    }
+
+    fun onChangeBeepTimeMinutes(minutes: Int) {
+        mBeepTimeMinutes = minutes
+        setBeforeBeepTime()
+    }
+
+    fun onChangeBeepTimeSecond(seconds: Int) {
+        mBeepTimeSeconds = seconds
+        setBeforeBeepTime()
+    }
+
+    fun onChangeRoundDurationTimeMinutes(minutes: Int) {
+        mRoundDurationMinutes = minutes
+        setRoundDurationTime()
+    }
+
+    fun onChangeRoundDurationTimeSecond(seconds: Int) {
+        mRoundDurationSeconds = seconds
+        setRoundDurationTime()
+    }
+
+    fun setRoundDurationTime() = viewState.setRoundDuration(mRoundDurationMinutes, mRoundDurationSeconds)
+
+    fun setBeforeBeepTime() = viewState.setBeforeBeepTime(mBeepTimeMinutes, mBeepTimeSeconds)
+
+    private fun onGettingActualTime() {
+        getBeforeSetTime()
+        setBeforeBeepTime()
+        setRoundDurationTime()
     }
 
     private fun getBeforeSetTime() {
@@ -66,28 +90,4 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         SharedPreferencesManager.saveMainTimerTime(mContext, newMainTimerSeconds)
         SharedPreferencesManager.saveSecondaryTimerTime(mContext, secondTimerSeconds)
     }
-
-    fun onChangeBeepTimeMinutes(minutes: Int) {
-        mBeepTimeMinutes = minutes
-        setBeforeBeepTime()
-    }
-
-    fun onChangeBeepTimeSecond(seconds: Int) {
-        mBeepTimeSeconds = seconds
-        setBeforeBeepTime()
-    }
-
-    fun onChangeRoundDurationTimeMinutes(minutes: Int) {
-        mRoundDurationMinutes = minutes
-        setRoundDurationTime()
-    }
-
-    fun onChangeRoundDurationTimeSecond(seconds: Int) {
-        mRoundDurationSeconds = seconds
-        setRoundDurationTime()
-    }
-
-    private fun setRoundDurationTime() = viewState.setRoundDuration(mRoundDurationMinutes, mRoundDurationSeconds)
-
-    private fun setBeforeBeepTime() = viewState.setBeforeBeepTime(mBeepTimeMinutes, mBeepTimeSeconds)
 }

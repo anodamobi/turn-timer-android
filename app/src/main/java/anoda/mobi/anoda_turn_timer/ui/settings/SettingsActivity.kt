@@ -156,19 +156,27 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
 
     private fun saveRoundTime() {
         val timeStr = etRoundDuration.text.toString()
-        val roundMinutes = getMinutes(timeStr)
-        val roundSeconds = getSeconds(timeStr)
-        etRoundDuration.text = getEditableTimeText("$roundMinutes:$roundSeconds")
-        mPresenter.onChangeRoundDurationTimeMinutes(roundMinutes.toInt())
-        mPresenter.onChangeRoundDurationTimeSecond(roundSeconds.toInt())
+        if (timeStr.isEmpty()) {
+            mPresenter.setRoundDurationTime()
+        } else {
+            val roundMinutes = getMinutes(timeStr)
+            val roundSeconds = getSeconds(timeStr)
+            etRoundDuration.text = getEditableTimeText("$roundMinutes:$roundSeconds")
+            mPresenter.onChangeRoundDurationTimeMinutes(roundMinutes.toInt())
+            mPresenter.onChangeRoundDurationTimeSecond(roundSeconds.toInt())
+        }
     }
 
     private fun saveBeepTime() {
         val timeStr = etBeepTime.text.toString()
-        val beepMinutes = getMinutes(timeStr)
-        val beepSeconds = getSeconds(timeStr)
-        etBeepTime.text = getEditableTimeText("$beepMinutes:$beepSeconds")
-        mPresenter.onChangeBeepTimeMinutes(beepMinutes.toInt())
-        mPresenter.onChangeBeepTimeSecond(beepSeconds.toInt())
+        if (timeStr.isEmpty()) {
+            mPresenter.setBeforeBeepTime()
+        } else {
+            val beepMinutes = getMinutes(timeStr)
+            val beepSeconds = getSeconds(timeStr)
+            etBeepTime.text = getEditableTimeText("$beepMinutes:$beepSeconds")
+            mPresenter.onChangeBeepTimeMinutes(beepMinutes.toInt())
+            mPresenter.onChangeBeepTimeSecond(beepSeconds.toInt())
+        }
     }
 }

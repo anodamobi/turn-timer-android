@@ -94,14 +94,14 @@
 
         <FrameLayout
             android:id="@+id/flBackButton"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="@dimen/circle_button_shape_size"
+            android:layout_height="@dimen/circle_button_shape_size"
             android:background="@drawable/ic_background_oval">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivBackButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:contentDescription="@string/description_back"
                 app:srcCompat="@drawable/ic_arrow_back" />
@@ -109,16 +109,16 @@
 
         <FrameLayout
             android:id="@+id/flBShareButton"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="@dimen/circle_button_shape_size"
+            android:layout_height="@dimen/circle_button_shape_size"
             android:layout_marginStart="415dp"
             android:background="@drawable/ic_background_oval"
             app:layout_constraintStart_toEndOf="@id/flBackButton">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivShareButton"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:contentDescription="@string/description_share"
                 app:srcCompat="@drawable/ic_share" />

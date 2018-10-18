@@ -9,6 +9,7 @@ import anoda.mobi.anoda_turn_timer.util.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
+import java.io.File
 
 class TimerActivity : MvpAppCompatActivity(), TimerView {
 
@@ -19,9 +20,6 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         const val TIMER_END_PROGRESS = 1
         const val PAUSE_BUTTON = 1
         const val START_BUTTON = 0
-
-        const val MAIN_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.start_end}"
-        const val SECONDARY_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.alarm}"
     }
 
     @InjectPresenter
@@ -35,7 +33,7 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     private fun init() {
-        ivBtnReset.setOnClickListener { mPresenter.onTimerTextClick() }
+        ivBtnReset.setOnClickListener { mPresenter.onResetTimerClick() }
         ivSettings.setOnClickListener { mPresenter.onSettingsClick() }
         ivStart.setOnClickListener { mPresenter.onStartTimerClick() }
         ivPause.setOnClickListener { mPresenter.onPauseTimerClick() }
@@ -77,11 +75,11 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun playMainSignal() {
-        PlaySoundManager.playSound(this, MAIN_SIGNAL_URI)
+        PlaySoundManager.playSound(this, rawSoundParser(R.raw.start_end))
     }
 
     override fun playSecondarySignal() {
-        PlaySoundManager.playSound(this, SECONDARY_SIGNAL_URI)
+        PlaySoundManager.playSound(this, rawSoundParser(R.raw.alarm))
     }
 
     override fun updateTimerBackgroundProgress(angle: Float) {
@@ -89,4 +87,6 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
             tpbvTimerBackground.update(angle)
         }
     }
+
+    private fun rawSoundParser(rawId: Int): String = "android.resource://$packageName${File.separator}$rawId"
 }

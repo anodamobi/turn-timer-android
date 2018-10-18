@@ -53,6 +53,51 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         }
     }
 
+    override fun onMainTimerFinished() {
+        mainTimerFinished()
+        viewState.playMainSignal()
+    }
+
+    override fun onSecondaryTimerFinished() {
+        viewState.playSecondarySignal()
+    }
+
+    override fun onNewTimerCycle(timeLeft: Long) {
+        mInnerElapsedTime++
+        val text = formatText(timeLeft)
+        onTimerNextIteration(text)
+    }
+
+    fun onStartTimerClick() {
+        Timber.d("Start clicked")
+        if (isTimerPaused.not()) {
+            startTimer()
+        } else {
+            resumeTimer()
+        }
+    }
+
+    fun onPauseTimerClick() {
+        Timber.d("Pause clicked")
+        pauseTimer()
+    }
+
+    fun onResetTimerClick() {
+        Timber.d("Reset clicked")
+        if (isTimerStarted.not()) {
+            startTimer()
+        }
+
+        if (isTimerStarted || isTimerPaused) resetTimer()
+    }
+
+    fun onSettingsClick() {
+        if (isTimerStarted && isTimerPaused.not()) {
+            onPauseTimerClick()
+        }
+        viewState.startSettingsActivity()
+    }
+
     private fun checkIsShouldUpdateTimerText() {
         if (isTimerStarted.not() && isTimerPaused.not()) {
             updateTimerText()
@@ -77,37 +122,6 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     private fun getTimeToEnd() = SharedPreferencesManager.loadMainTimerTime(mContext).toLong()
 
     private fun getTimeToEndPlaySignal() = SharedPreferencesManager.loadSecondaryTimerTime(mContext).toLong()
-
-    fun onStartTimerClick() {
-        if (isTimerPaused.not()) {
-            startTimer()
-        } else {
-            resumeTimer()
-        }
-    }
-
-    fun onPauseTimerClick() {
-        pauseTimer()
-    }
-
-    fun onResetTimerClick() {
-        if (isTimerStarted) resetTimer()
-    }
-
-    fun onTimerTextClick() {
-        if (isTimerStarted.not()) {
-            startTimer()
-        } else {
-            resetTimer()
-        }
-    }
-
-    fun onSettingsClick() {
-        if (isTimerStarted && isTimerPaused.not()) {
-            onPauseTimerClick()
-        }
-        viewState.startSettingsActivity()
-    }
 
     private fun startTimer() {
         isTimerStarted = true
@@ -154,11 +168,6 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         mATimer.resumeTimer()
     }
 
-    override fun onMainTimerFinished() {
-        mainTimerFinished()
-        viewState.playMainSignal()
-    }
-
     private fun mainTimerFinished() {
         isTimerStarted = false
         isTimerPaused = false
@@ -167,12 +176,6 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showStartButton()
 
         mInnerElapsedTime = 0
-    }
-
-    override fun onNewTimerCycle(timeLeft: Long) {
-        mInnerElapsedTime++
-        val text = formatText(timeLeft)
-        onTimerNextIteration(text)
     }
 
     private fun formatText(timeLeft: Long): String {
@@ -187,6 +190,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun onTimerNextIteration(timeLeftText: String) {
+        viewState.showTimerInProgress()
+        viewState.showPauseButton()
         viewState.updateTimerText(timeLeftText)
         viewState.updateTimerBackgroundProgress(getAngleForTimerBackground())
     }
@@ -194,9 +199,5 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     private fun getAngleForTimerBackground(): Float {
         val stepSize = ANGLES_IN_CIRCLE.toFloat() / mCurrentTimerTimeToEnd
         return ANGLES_IN_CIRCLE - (mInnerElapsedTime * stepSize)
-    }
-
-    override fun onSecondaryTimerFinished() {
-        viewState.playSecondarySignal()
     }
 }

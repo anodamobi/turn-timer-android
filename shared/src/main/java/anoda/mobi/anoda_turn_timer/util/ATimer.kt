@@ -1,5 +1,6 @@
 package anoda.mobi.anoda_turn_timer.util
 
+import android.util.Log
 import java.util.*
 
 class ATimer(val timerInteraction: ATimerInteraction) {
@@ -72,6 +73,7 @@ class ATimer(val timerInteraction: ATimerInteraction) {
 
     private lateinit var timer: Timer
     private val timerStateManager = ATimerStateManager()
+    private var run = true
 
     fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         if (secondsToEnd < 0 || secondsSecondaryBeforeEnd < 0) {
@@ -81,6 +83,7 @@ class ATimer(val timerInteraction: ATimerInteraction) {
         timerStateManager.setTime(secondsToEnd, secondsSecondaryBeforeEnd)
 
         if (timerStateManager.isTimerStarted.not()) {
+            run = true
             startTimer()
         } else {
             resetTimer(secondsToEnd, secondsSecondaryBeforeEnd)
@@ -111,6 +114,7 @@ class ATimer(val timerInteraction: ATimerInteraction) {
     }
 
     fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+        run = false
         stopTimer()
         startTimer(secondsToEnd, secondsSecondaryBeforeEnd)
     }
@@ -129,11 +133,17 @@ class ATimer(val timerInteraction: ATimerInteraction) {
                 if (timerStateManager.isSecondaryTimerFinished()) {
                     timerInteraction.onSecondaryTimerFinished()
                 }
-                timerInteraction.onNewTimerCycle(timerStateManager.secondsLeft)
+                Log.d("ATimer", "${timerStateManager.secondsLeft}")
+                if (run) {
+                    timerInteraction.onNewTimerCycle(timerStateManager.secondsLeft)
+                } else {
+                    stopTimer()
+                    timerInteraction.onMainTimerFinished()
+                    return
+                }
             }
         }, TIMER_DELAY, TIMER_INTERVAL)
     }
-
 }
 
 interface ATimerInteraction {

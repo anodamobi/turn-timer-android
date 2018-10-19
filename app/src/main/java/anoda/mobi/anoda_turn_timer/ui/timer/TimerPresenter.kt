@@ -63,9 +63,10 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     override fun onNewTimerCycle(timeLeft: Long) {
+        val progressAngle = getAngleForTimerBackground(mInnerElapsedTime)
         mInnerElapsedTime++
         val text = formatText(timeLeft)
-        onTimerNextIteration(text)
+        onTimerNextIteration(text, progressAngle)
     }
 
     fun onStartTimerClick() {
@@ -176,6 +177,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showStartButton()
 
         mInnerElapsedTime = 0
+        viewState.updateTimerBackgroundProgress(mInnerElapsedTime.toFloat())
     }
 
     private fun formatText(timeLeft: Long): String {
@@ -189,15 +191,15 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         }
     }
 
-    private fun onTimerNextIteration(timeLeftText: String) {
+    private fun onTimerNextIteration(timeLeftText: String, progressAngle: Float) {
         viewState.showTimerInProgress()
         viewState.showPauseButton()
         viewState.updateTimerText(timeLeftText)
-        viewState.updateTimerBackgroundProgress(getAngleForTimerBackground())
+        viewState.updateTimerBackgroundProgress(progressAngle)
     }
 
-    private fun getAngleForTimerBackground(): Float {
+    private fun getAngleForTimerBackground(innerElapsedTime: Int): Float {
         val stepSize = ANGLES_IN_CIRCLE.toFloat() / mCurrentTimerTimeToEnd
-        return ANGLES_IN_CIRCLE - (mInnerElapsedTime * stepSize)
+        return ANGLES_IN_CIRCLE - (innerElapsedTime * stepSize)
     }
 }

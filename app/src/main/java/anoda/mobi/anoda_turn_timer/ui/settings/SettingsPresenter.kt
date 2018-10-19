@@ -17,7 +17,6 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     companion object {
         private const val COLON_SYMBOL = ":"
         private const val DOUBLE_ZERO = "00"
-        private const val MINUTES_IN_HOUR = 60
         private const val SECONDS_IN_MINUTE = 60
         private const val SECONDS_LIMIT = 59
         private const val MINUTES_END_INDEX = 2
@@ -41,18 +40,18 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     fun saveRoundTime(timeValue: String) {
         when (timeValue.length) {
             0 -> setSavedRoundTime()
-            else -> setFormatEditedTime2(timeValue, true)
+            else -> setFormatEditedTime(timeValue, true)
         }
     }
 
     fun saveBeepTime(timeValue: String) {
         when (timeValue.length) {
             0 -> setSavedBeepTime()
-            else -> setFormatEditedTime2(timeValue, false)
+            else -> setFormatEditedTime(timeValue, false)
         }
     }
 
-    private fun setFormatEditedTime2(timeValue: String, isRoundTime: Boolean) {
+    private fun setFormatEditedTime(timeValue: String, isRoundTime: Boolean) {
         val formatTime = when (timeValue.length) {
             1 -> "0$timeValue$COLON_SYMBOL$DOUBLE_ZERO"
             2 -> "$timeValue$COLON_SYMBOL$DOUBLE_ZERO"

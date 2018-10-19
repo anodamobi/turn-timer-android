@@ -11,8 +11,10 @@ interface TimerView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun startSettingsActivity()
 
+    @StateStrategyType(SkipStrategy::class)
     fun showPauseButton()
 
+    @StateStrategyType(SkipStrategy::class)
     fun showStartButton()
 
     fun showTimerInProgress()

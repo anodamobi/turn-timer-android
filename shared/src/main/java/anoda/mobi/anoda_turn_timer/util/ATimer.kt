@@ -129,7 +129,6 @@ class ATimer(val timerInteraction: ATimerInteraction) {
                     stopTimer()
                     return
                 }
-                timerStateManager.incrementElapsedTime()
                 if (timerStateManager.isSecondaryTimerFinished()) {
                     timerInteraction.onSecondaryTimerFinished()
                 }
@@ -138,9 +137,9 @@ class ATimer(val timerInteraction: ATimerInteraction) {
                     timerInteraction.onNewTimerCycle(timerStateManager.secondsLeft)
                 } else {
                     stopTimer()
-                    timerInteraction.onMainTimerFinished()
                     return
                 }
+                timerStateManager.incrementElapsedTime()
             }
         }, TIMER_DELAY, TIMER_INTERVAL)
     }

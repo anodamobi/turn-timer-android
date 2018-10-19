@@ -1,5 +1,6 @@
 package anoda.mobi.anoda_turn_timer.ui.settings
 
+import android.text.Editable
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SkipStrategy
@@ -10,7 +11,7 @@ interface SettingsView : MvpView {
     @StateStrategyType(SkipStrategy::class)
     fun showShareAppVariant()
 
-    fun setRoundDuration(minutes: Int, seconds: Int)
+    fun setRoundDuration(roundTime: Editable)
 
-    fun setBeforeBeepTime(minutes: Int, seconds: Int)
+    fun setBeepTime(beepTime: Editable)
 }

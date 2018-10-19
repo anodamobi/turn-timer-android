@@ -7,6 +7,7 @@
 
     <dimen name="circle_button_size_horizontal">50dp</dimen>
     <dimen name="time_picker_oval_width">250dp</dimen>
+    <dimen name="ripple_drawable_shape_radius">50dp</dimen>
 
     <dimen name="settings_et_margin_start_end">30dp</dimen>
     <dimen name="settings_et_margin_bottom_top">4dp</dimen>

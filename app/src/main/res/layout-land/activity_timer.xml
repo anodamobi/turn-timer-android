@@ -44,7 +44,7 @@
             android:layout_marginStart="43dp"
             android:layout_marginTop="67dp"
             android:contentDescription="@string/description_restart"
-            app:srcCompat="@drawable/ic_reset" />
+            app:srcCompat="@drawable/ic_reset_bg_ripple" />
 
     </ViewSwitcher>
 
@@ -72,7 +72,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_settings" />
+            app:srcCompat="@drawable/ic_settings_ripple" />
 
         <ViewSwitcher
             android:id="@+id/vsActionButtons"
@@ -92,14 +92,14 @@
                 android:layout_width="@dimen/circle_button_start_pause_size_land"
                 android:layout_height="@dimen/circle_button_start_pause_size_land"
                 android:contentDescription="@string/description_start"
-                app:srcCompat="@drawable/ic_start" />
+                app:srcCompat="@drawable/ic_start_ripple" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivPause"
                 android:layout_width="@dimen/circle_button_start_pause_size_land"
                 android:layout_height="@dimen/circle_button_start_pause_size_land"
                 android:contentDescription="@string/description_pause"
-                app:srcCompat="@drawable/ic_pause" />
+                app:srcCompat="@drawable/ic_pause_ripple" />
 
         </ViewSwitcher>
 
@@ -113,7 +113,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_reset_bg" />
+            app:srcCompat="@drawable/ic_reset_bg_ripple" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

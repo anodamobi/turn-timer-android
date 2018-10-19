@@ -5,7 +5,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="circleBackgroundColor">#e7e7e7</color>
-    <color name="lightOrange">#ffa03a</color>
+    <color name="lightOrange">#FFA03A</color>
+    <color name="darkOrange">#FF8400</color>
     <color name="circleStrokeColor">@color/lightOrange</color>
     <color name="backgroundOvalColor">#19ffa03a</color>
     <color name="ic_launcher_background">#FFFFFF</color>

@@ -45,7 +45,7 @@
             android:layout_marginStart="43dp"
             android:layout_marginTop="67dp"
             android:contentDescription="@string/description_restart"
-            app:srcCompat="@drawable/ic_reset" />
+            app:srcCompat="@drawable/ic_reset_ripple" />
 
     </ViewSwitcher>
 
@@ -69,7 +69,7 @@
             android:contentDescription="@string/description_settings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_settings" />
+            app:srcCompat="@drawable/ic_settings_ripple" />
 
         <ViewSwitcher
             android:id="@+id/vsActionButtons"
@@ -88,15 +88,15 @@
                 android:id="@+id/ivStart"
                 android:layout_width="@dimen/circle_button_start_pause_size"
                 android:layout_height="@dimen/circle_button_start_pause_size"
-                android:contentDescription="@string/description_start"
-                app:srcCompat="@drawable/ic_start" />
+                android:background="@drawable/ic_start_ripple"
+                android:contentDescription="@string/description_start" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/ivPause"
                 android:layout_width="@dimen/circle_button_start_pause_size"
                 android:layout_height="@dimen/circle_button_start_pause_size"
-                android:contentDescription="@string/description_pause"
-                app:srcCompat="@drawable/ic_pause" />
+                android:background="@drawable/ic_pause_ripple"
+                android:contentDescription="@string/description_pause" />
 
         </ViewSwitcher>
 
@@ -109,7 +109,7 @@
             android:contentDescription="@string/description_share"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_reset_bg" />
+            app:srcCompat="@drawable/ic_reset_bg_ripple" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

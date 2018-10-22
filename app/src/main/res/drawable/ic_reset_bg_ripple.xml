@@ -7,5 +7,5 @@
             <corners android:radius="@dimen/ripple_drawable_shape_radius" />
         </shape>
     </item>
-    <item android:drawable="@drawable/ic_reset" />
+    <item android:drawable="@drawable/ic_reset_bg" />
 </ripple>

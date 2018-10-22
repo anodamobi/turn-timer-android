@@ -38,6 +38,7 @@
                 android:layout_width="189dp"
                 android:layout_height="83dp"
                 android:hint="@null"
+                android:digits="@string/time_input_digits"
                 tools:text="01:00" />
 
         </FrameLayout>
@@ -68,6 +69,7 @@
                 android:layout_width="189dp"
                 android:layout_height="83dp"
                 android:hint="@null"
+                android:digits="@string/time_input_digits"
                 tools:text="01:00" />
         </FrameLayout>
     </android.support.constraint.ConstraintLayout>

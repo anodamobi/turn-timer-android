@@ -6,7 +6,7 @@ private const val TIME_MASK = "##:##"
 
 fun maskWorker(s: Editable) {
     val editableLength = s.length
-    if (editableLength < TIME_MASK.length) {
+    if (editableLength < TIME_MASK.length && s.contains(":").not()) {
         if (TIME_MASK[editableLength] != '#') {
             s.append(TIME_MASK[editableLength])
         } else if (TIME_MASK[editableLength - 1] != '#') {

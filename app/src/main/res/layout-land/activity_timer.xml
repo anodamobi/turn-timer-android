@@ -44,7 +44,7 @@
             android:layout_marginStart="43dp"
             android:layout_marginTop="67dp"
             android:contentDescription="@string/description_restart"
-            app:srcCompat="@drawable/ic_reset_bg_ripple" />
+            app:srcCompat="@drawable/ic_reset_ripple" />
 
     </ViewSwitcher>
 

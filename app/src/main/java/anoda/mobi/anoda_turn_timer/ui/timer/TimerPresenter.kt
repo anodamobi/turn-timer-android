@@ -22,6 +22,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         const val ANGLES_IN_CIRCLE = 360
 
         const val READ_SETTINGS_DELAY = 500L
+        private const val RESUME_DELAY = 1000L
     }
 
     private var isTimerStarted = false
@@ -30,6 +31,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     private var mCurrentTimerTimeToEnd = 0L //timeToEnd for current started timer
 
     private var mInnerElapsedTime = 0
+    private var pausedTime: Long = 0L
 
     @Inject
     lateinit var mContext: Context
@@ -71,16 +73,24 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     fun onStartTimerClick() {
         Timber.d("Start clicked")
-        if (isTimerPaused.not()) {
-            startTimer()
-        } else {
-            resumeTimer()
+        synchronized(this) {
+            if (isTimerPaused.not()) {
+                startTimer()
+            } else {
+                val delay = pausedTime + RESUME_DELAY
+                if (System.currentTimeMillis() > delay) {
+                    resumeTimer()
+                }
+            }
         }
     }
 
     fun onPauseTimerClick() {
-        Timber.d("Pause clicked")
-        pauseTimer()
+        synchronized(this) {
+            pausedTime = System.currentTimeMillis()
+            Timber.d("Pause clicked")
+            pauseTimer()
+        }
     }
 
     fun onResetTimerClick() {
@@ -138,15 +148,17 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun resetTimer() {
-        mATimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
-        setTimeToEnd()
+        synchronized(this) {
+            mATimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
+            setTimeToEnd()
 
-        isTimerStarted = true
-        isTimerPaused = false
+            isTimerStarted = true
+            isTimerPaused = false
 
-        viewState.showTimerInProgress()
-        viewState.showPauseButton()
-        Timber.i("reset")
+            viewState.showTimerInProgress()
+            viewState.showPauseButton()
+            Timber.i("reset")
+        }
     }
 
     private fun setTimeToEnd() {

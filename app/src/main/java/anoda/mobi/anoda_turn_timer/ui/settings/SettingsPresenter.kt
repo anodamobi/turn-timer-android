@@ -6,7 +6,9 @@ import anoda.mobi.anoda_turn_timer.App
 import anoda.mobi.anoda_turn_timer.util.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
+import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.abs
 
 @InjectViewState
 class SettingsPresenter : MvpPresenter<SettingsView>() {
@@ -16,7 +18,10 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     companion object {
         private const val COLON_SYMBOL = ":"
+        private const val COLON_INDEX = 2
+        private const val MINIMUM_EDIT_LENGTH = 2
         private const val DOUBLE_ZERO = "00"
+        private const val MINUTES_LIMIT = 59
         private const val SECONDS_IN_MINUTE = 60
         private const val SECONDS_LIMIT = 59
         private const val MINUTES_END_INDEX = 2
@@ -51,51 +56,139 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         }
     }
 
-    private fun setFormatEditedTime(timeValue: String, isRoundTime: Boolean) {
-        val formatTime = when (timeValue.length) {
-            1 -> "0$timeValue$COLON_SYMBOL$DOUBLE_ZERO"
-            2 -> "$timeValue$COLON_SYMBOL$DOUBLE_ZERO"
-            3 -> "${timeValue.substring(0, MINUTES_END_INDEX)}$COLON_SYMBOL$DOUBLE_ZERO"
-            else -> getTime(timeValue)
-        }
-        val formatTimeEditable = getEditableText(formatTime)
+    fun onTextChanged(caretPosition: Int, s: CharSequence, isRoundTime: Boolean) {
+        if (caretPosition == COLON_INDEX + 1 && s.length > MINIMUM_EDIT_LENGTH
+                && s.contains(COLON_SYMBOL).not()) {
+            val symbolsBefore = s.substring(0, COLON_INDEX)
+            val symbolsAfter = s.substring(COLON_INDEX)
 
-        if (isRoundTime) {
-            viewState.setRoundDuration(formatTimeEditable)
-            saveNewTime(formatTime, true)
-        } else {
-            viewState.setBeepTime(formatTimeEditable)
-            saveNewTime(formatTime, false)
+            val result = if (symbolsAfter.isNotEmpty()) {
+                symbolsBefore + COLON_SYMBOL + symbolsAfter.substring(0, 1)
+            } else {
+                symbolsBefore
+            }
+
+            if (isRoundTime)
+                viewState.setRoundDuration(getEditableText(result))
+            else
+                viewState.setBeepTime(getEditableText(result))
         }
-        SharedPreferencesManager.setTimeChanged(mContext, true)
+    }
+
+    private fun setFormatEditedTime(timeValue: String, isRoundTime: Boolean) {
+        val formatTime: String
+        try {
+            formatTime = when (timeValue.length) {
+                1 -> "0$timeValue$COLON_SYMBOL$DOUBLE_ZERO"
+                2 -> "$timeValue$COLON_SYMBOL$DOUBLE_ZERO"
+                else -> getTime(timeValue)
+            }
+            val formatTimeEditable = getEditableText(formatTime)
+
+            if (isRoundTime) {
+                viewState.setRoundDuration(formatTimeEditable)
+                saveNewTime(formatTime, true)
+            } else {
+                viewState.setBeepTime(formatTimeEditable)
+                saveNewTime(formatTime, false)
+            }
+            SharedPreferencesManager.setTimeChanged(mContext, true)
+        } catch (e: Exception) {
+            setSavedTime()
+            Timber.e(e)
+        }
     }
 
     private fun getTime(timeValue: String): String {
-        val minutes = getMinutes(timeValue)
-        val seconds = getSeconds(timeValue)
-        return "$minutes$COLON_SYMBOL$seconds"
+        val colonIndex = timeValue.indexOf(COLON_SYMBOL)
+        val isColonIndexOneOrThee = colonIndex == 1 || colonIndex == 3
+
+        return if (colonIndex < 0 && timeValue.length == 4) {
+            "${timeValue.substring(0, 2)}$COLON_SYMBOL${timeValue.substring(2)}"
+        } else if (colonIndex < 0 && timeValue.length == 3) {
+            "0${timeValue.substring(0, 1)}$COLON_SYMBOL${timeValue.substring(timeValue.indexOf(COLON_SYMBOL))}"
+        } else if (colonIndex < 0) {
+            "${timeValue.substring(0, 1)}$COLON_SYMBOL${timeValue.substring(1)}"
+        } else if (isColonIndexOneOrThee && timeValue.length == 4) {
+            "${getMinutes(timeValue)}$COLON_SYMBOL${getSeconds(timeValue)}"
+        } else if (isColonIndexOneOrThee && timeValue.length > 4) {
+            getTime(correctTime(timeValue))
+        } else if (colonIndex > 0 && timeValue.length > 4 && (colonIndex == 3 || colonIndex == 4)) {
+            getTime(timeValue.substring(0, 2) + COLON_SYMBOL + timeValue.substring(MINUTES_END_INDEX, timeValue.indexOf(COLON_SYMBOL)))
+        } else if (timeValue.contains(COLON_SYMBOL).not() && timeValue.length == 4) {
+            timeValue.substring(0, MINUTES_END_INDEX) + COLON_SYMBOL + getSeconds(timeValue.substring(MINUTES_END_INDEX))
+        } else {
+            "${getMinutes(timeValue)}$COLON_SYMBOL${getSeconds(timeValue)}"
+        }
     }
 
     private fun getMinutes(timeValue: String): String {
         var minutes = timeValue
-        if (timeValue.contains(COLON_SYMBOL)) {
-            minutes = minutes.substring(0, minutes.indexOf(COLON_SYMBOL))
+
+        minutes = if (timeValue.contains(COLON_SYMBOL)) {
+            minutes.substring(0, minutes.indexOf(COLON_SYMBOL))
+        } else {
+            minutes.substring(0, MINUTES_END_INDEX)
         }
-        minutes = if (minutes.length == 1) "0${minutes}" else minutes
+
+        minutes = when {
+            minutes.isEmpty() -> DOUBLE_ZERO
+            minutes.length == 1 -> "0$minutes"
+            minutes.toInt() > MINUTES_LIMIT -> MINUTES_LIMIT.toString()
+            else -> minutes
+        }
+
         return minutes
     }
 
     private fun getSeconds(timeValue: String): String {
         var seconds = timeValue
-        if (timeValue.contains(COLON_SYMBOL)) {
-            seconds = seconds.substring(seconds.indexOf(COLON_SYMBOL) + 1)
+
+        seconds = if (timeValue.contains(COLON_SYMBOL)) {
+            seconds.substring(seconds.indexOf(COLON_SYMBOL) + 1)
+        } else {
+            seconds.substring(MINUTES_END_INDEX)
         }
+
         seconds = when {
-            seconds.length == 1 -> "${seconds}0"
+            seconds.isEmpty() -> DOUBLE_ZERO
+            seconds.length == 1 -> "0$seconds"
             seconds.toInt() > SECONDS_LIMIT -> SECONDS_LIMIT.toString()
             else -> seconds
         }
         return seconds
+    }
+
+    private fun correctTime(timeValue: String): String {
+        val colonIndex = timeValue.indexOf(COLON_SYMBOL)
+
+        return if (colonIndex == COLON_INDEX) getTime(timeValue)
+        else moveColonSymbol(timeValue, colonIndex)
+    }
+
+    private fun moveColonSymbol(timeValue: String, colonIndex: Int): String = when (colonIndex) {
+        1 -> moveColonForward(timeValue, colonIndex, COLON_INDEX - colonIndex)
+        else -> moveColonBackward(timeValue, colonIndex, abs(COLON_INDEX - colonIndex))
+    }
+
+    private fun moveColonForward(timeValue: String, colonIndex: Int, steps: Int): String {
+        val symbolsBefore = timeValue.substring(0, colonIndex)
+        val symbolsAfter = timeValue.substring(colonIndex + 1)
+
+        val updSymbolsBefore = symbolsBefore + symbolsAfter[0]
+        val updSymbolsAfter = symbolsAfter.substring(steps)
+
+        return "$updSymbolsBefore$COLON_SYMBOL$updSymbolsAfter"
+    }
+
+    private fun moveColonBackward(timeValue: String, colonIndex: Int, steps: Int): String {
+        val symbolsBefore = timeValue.substring(0, colonIndex)
+        val symbolsAfter = timeValue.substring(colonIndex + 1)
+
+        val updSymbolsBefore = symbolsBefore.substring(0, colonIndex - steps)
+        val updSymbolsAfter = symbolsBefore.last() + symbolsAfter
+
+        return "$updSymbolsBefore$COLON_SYMBOL$updSymbolsAfter"
     }
 
     private fun saveNewTime(timeValue: String, isRoundTime: Boolean) {

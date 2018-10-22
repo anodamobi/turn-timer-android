@@ -58,11 +58,15 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
                 maskCorrector(s)
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
                 isDeleting = count > after
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val caretPosition = etRoundDuration.selectionStart
+                if (isDeleting.not()) {
+                    mPresenter.onTextChanged(caretPosition, s, true)
+                }
             }
         })
         etRoundDuration?.setOnFocusChangeListener { _, hasFocus -> if (hasFocus.not()) saveRoundTime() }
@@ -78,7 +82,11 @@ class SettingsActivity : MvpAppCompatActivity(), SettingsView {
                 isDeleting = count > after
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val caretPosition = etBeepTime.selectionStart
+                if (isDeleting.not()) {
+                    mPresenter.onTextChanged(caretPosition, s, false)
+                }
             }
         })
         etBeepTime?.setOnFocusChangeListener { _, hasFocus -> if (hasFocus.not()) saveBeepTime() }

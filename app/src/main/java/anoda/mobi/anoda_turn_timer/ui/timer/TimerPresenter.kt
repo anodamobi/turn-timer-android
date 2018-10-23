@@ -121,7 +121,9 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun checkIsTimerStartedAndDurationChanged() {
-        if (SharedPreferencesManager.isTimeChanged(this@TimerPresenter.mContext) && (isTimerStarted || isTimerPaused)) {
+        val isTimeChanged = SharedPreferencesManager.isTimeChanged(this@TimerPresenter.mContext)
+
+        if (isTimeChanged && (isTimerStarted || isTimerPaused)) {
             mainTimerFinished()
             updateTimerText()
             viewState.updateTimerBackgroundProgress(ANGLES_IN_CIRCLE.toFloat())

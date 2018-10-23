@@ -10,5 +10,4 @@
     <string name="beep_before_round_ends">Beep before round ends</string>
     <string name="round_duration">Round duration</string>
     <string name="share_description">ANODA Turn Timer. Enjoy games with friends \n https://play.google.com/store/details?id=%s</string>
-    <string name="time_input_digits">0123456789</string>
 </resources>

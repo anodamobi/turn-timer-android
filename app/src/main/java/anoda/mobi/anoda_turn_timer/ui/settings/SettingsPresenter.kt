@@ -57,8 +57,11 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     }
 
     fun onTextChanged(caretPosition: Int, s: CharSequence, isRoundTime: Boolean) {
-        if (caretPosition == COLON_INDEX + 1 && s.length > MINIMUM_EDIT_LENGTH
-                && s.contains(COLON_SYMBOL).not()) {
+        val isCaretPositionShiftedRight = caretPosition == COLON_INDEX + 1
+        val isEditSequenceHasMinimumLength = s.length > MINIMUM_EDIT_LENGTH
+        val isColonNotExists = s.contains(COLON_SYMBOL).not()
+
+        if (isCaretPositionShiftedRight && isEditSequenceHasMinimumLength && isColonNotExists) {
             val symbolsBefore = s.substring(0, COLON_INDEX)
             val symbolsAfter = s.substring(COLON_INDEX)
 
@@ -101,31 +104,38 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     private fun getTime(timeValue: String): String {
         val colonIndex = timeValue.indexOf(COLON_SYMBOL)
-        val isColonIndexOneOrThee = colonIndex == 1 || colonIndex == 3
+        val isColonPlacedOnFirstOrThirdPosition = colonIndex == 1 || colonIndex == 3
+        val minutes = getMinutes(timeValue)
+        val firstMinutesSymbol = timeValue.first()
+        val completeMinutes = timeValue.substring(0, 2)
 
-        return if (colonIndex < 0 && timeValue.length == 4) {
-            "${timeValue.substring(0, 2)}$COLON_SYMBOL${timeValue.substring(2)}"
-        } else if (colonIndex < 0 && timeValue.length == 3) {
-            "0${timeValue.substring(0, 1)}$COLON_SYMBOL${timeValue.substring(timeValue.indexOf(COLON_SYMBOL))}"
-        } else if (colonIndex < 0) {
-            "${timeValue.substring(0, 1)}$COLON_SYMBOL${timeValue.substring(1)}"
-        } else if (isColonIndexOneOrThee && timeValue.length == 4) {
-            "${getMinutes(timeValue)}$COLON_SYMBOL${getSeconds(timeValue)}"
-        } else if (isColonIndexOneOrThee && timeValue.length > 4) {
+        val isColonExists = colonIndex > 0
+        val isTimeValueHas4Symbols = timeValue.length == 4
+        val isTimeValueGreaterThan4Symbols = timeValue.length > 4
+
+        return if (isColonExists && isTimeValueHas4Symbols) {
+            "$completeMinutes$COLON_SYMBOL${timeValue.substring(2)}"
+        } else if (isColonExists && timeValue.length == 3) {
+            "0$firstMinutesSymbol$COLON_SYMBOL${timeValue.substring(timeValue.indexOf(COLON_SYMBOL))}"
+        } else if (isColonExists) {
+            "$firstMinutesSymbol$COLON_SYMBOL${timeValue.substring(1)}"
+        } else if (isColonPlacedOnFirstOrThirdPosition && isTimeValueHas4Symbols) {
+            "$minutes$COLON_SYMBOL${getSeconds(timeValue)}"
+        } else if (isColonPlacedOnFirstOrThirdPosition && isTimeValueGreaterThan4Symbols) {
             getTime(correctTime(timeValue))
-        } else if (colonIndex > 0 && timeValue.length > 4 && (colonIndex == 3 || colonIndex == 4)) {
-            getTime(timeValue.substring(0, 2) + COLON_SYMBOL + timeValue.substring(MINUTES_END_INDEX, timeValue.indexOf(COLON_SYMBOL)))
-        } else if (timeValue.contains(COLON_SYMBOL).not() && timeValue.length == 4) {
+        } else if (isColonExists && isTimeValueGreaterThan4Symbols && (colonIndex == 3 || colonIndex == 4)) {
+            getTime(completeMinutes + COLON_SYMBOL + timeValue.substring(MINUTES_END_INDEX, timeValue.indexOf(COLON_SYMBOL)))
+        } else if (timeValue.contains(COLON_SYMBOL).not() && isTimeValueHas4Symbols) {
             timeValue.substring(0, MINUTES_END_INDEX) + COLON_SYMBOL + getSeconds(timeValue.substring(MINUTES_END_INDEX))
         } else {
-            "${getMinutes(timeValue)}$COLON_SYMBOL${getSeconds(timeValue)}"
+            "$minutes$COLON_SYMBOL${getSeconds(timeValue)}"
         }
     }
 
     private fun getMinutes(timeValue: String): String {
         var minutes = timeValue
 
-        minutes = if (timeValue.contains(COLON_SYMBOL)) {
+        minutes = if (minutes.contains(COLON_SYMBOL)) {
             minutes.substring(0, minutes.indexOf(COLON_SYMBOL))
         } else {
             minutes.substring(0, MINUTES_END_INDEX)
@@ -144,7 +154,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
     private fun getSeconds(timeValue: String): String {
         var seconds = timeValue
 
-        seconds = if (timeValue.contains(COLON_SYMBOL)) {
+        seconds = if (seconds.contains(COLON_SYMBOL)) {
             seconds.substring(seconds.indexOf(COLON_SYMBOL) + 1)
         } else {
             seconds.substring(MINUTES_END_INDEX)
@@ -161,19 +171,25 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     private fun correctTime(timeValue: String): String {
         val colonIndex = timeValue.indexOf(COLON_SYMBOL)
+        val isColonPlacedCorrectly = colonIndex == COLON_INDEX
 
-        return if (colonIndex == COLON_INDEX) getTime(timeValue)
+        return if (isColonPlacedCorrectly) getTime(timeValue)
         else moveColonSymbol(timeValue, colonIndex)
     }
 
-    private fun moveColonSymbol(timeValue: String, colonIndex: Int): String = when (colonIndex) {
-        1 -> moveColonForward(timeValue, colonIndex, COLON_INDEX - colonIndex)
-        else -> moveColonBackward(timeValue, colonIndex, abs(COLON_INDEX - colonIndex))
+    private fun moveColonSymbol(timeValue: String, colonIndex: Int): String {
+        val moveStepsCont = COLON_INDEX - colonIndex
+
+        return when (colonIndex) {
+            1 -> moveColonForward(timeValue, colonIndex, moveStepsCont)
+            else -> moveColonBackward(timeValue, colonIndex, abs(moveStepsCont))
+        }
     }
 
     private fun moveColonForward(timeValue: String, colonIndex: Int, steps: Int): String {
         val symbolsBefore = timeValue.substring(0, colonIndex)
-        val symbolsAfter = timeValue.substring(colonIndex + 1)
+        val symbolsAfterStartPosition = colonIndex + 1
+        val symbolsAfter = timeValue.substring(symbolsAfterStartPosition)
 
         val updSymbolsBefore = symbolsBefore + symbolsAfter[0]
         val updSymbolsAfter = symbolsAfter.substring(steps)
@@ -183,9 +199,11 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
 
     private fun moveColonBackward(timeValue: String, colonIndex: Int, steps: Int): String {
         val symbolsBefore = timeValue.substring(0, colonIndex)
-        val symbolsAfter = timeValue.substring(colonIndex + 1)
+        val symbolsAfterStartPosition = colonIndex + 1
+        val symbolsAfter = timeValue.substring(symbolsAfterStartPosition)
 
-        val updSymbolsBefore = symbolsBefore.substring(0, colonIndex - steps)
+        val symbolsBeforeEndPosition = colonIndex - steps
+        val updSymbolsBefore = symbolsBefore.substring(0, symbolsBeforeEndPosition)
         val updSymbolsAfter = symbolsBefore.last() + symbolsAfter
 
         return "$updSymbolsBefore$COLON_SYMBOL$updSymbolsAfter"

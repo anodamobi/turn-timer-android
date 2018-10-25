@@ -109,7 +109,7 @@ class SettingsPresenter : MvpPresenter<SettingsView>() {
         val firstMinutesSymbol = timeValue.first()
         val completeMinutes = timeValue.substring(0, 2)
 
-        val isColonExists = colonIndex > 0
+        val isColonExists = colonIndex < 0
         val isTimeValueHas4Symbols = timeValue.length == 4
         val isTimeValueGreaterThan4Symbols = timeValue.length > 4
 

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ANODA-Turn-Timer</string>
+    <string name="app_name">Turn Timer</string>
     <string name="turn_timer">Turn Timer</string>
     <string name="description_settings">Open App Settings</string>
     <string name="description_share">Share App</string>
@@ -9,5 +9,5 @@
     <string name="description_restart">Restart timer</string>
     <string name="beep_before_round_ends">Beep before round ends</string>
     <string name="round_duration">Round duration</string>
-    <string name="share_description">ANODA Turn Timer. Enjoy games with friends \n https://play.google.com/store/details?id=%s</string>
+    <string name="share_description">Turn Timer. Enjoy games with friends \n https://play.google.com/store/apps/details?id=%s</string>
 </resources>

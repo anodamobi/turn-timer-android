@@ -5,10 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import anoda.mobi.anoda_turn_timer.R
 import anoda.mobi.anoda_turn_timer.ui.settings.SettingsActivity
-import anoda.mobi.anoda_turn_timer.utils.PlaySoundManager
+import anoda.mobi.anoda_turn_timer.util.PlaySoundManager
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import kotlinx.android.synthetic.main.activity_timer.*
+import java.io.File
 
 class TimerActivity : MvpAppCompatActivity(), TimerView {
 
@@ -19,13 +20,10 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
         const val TIMER_END_PROGRESS = 1
         const val PAUSE_BUTTON = 1
         const val START_BUTTON = 0
-
-        const val MAIN_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.start_end}"
-        const val SECONDARY_SIGNAL_URI = "android.resource://anoda.mobi.anoda_turn_timer/${R.raw.alarm}"
     }
 
     @InjectPresenter
-    lateinit var presenter: TimerPresenter
+    lateinit var mPresenter: TimerPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +33,11 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     private fun init() {
-        ivSettings.setOnClickListener { presenter.onSettingsClick() }
-        ivStart.setOnClickListener { presenter.onStartTimerClick() }
-        ivPause.setOnClickListener { presenter.onPauseTimerClick() }
-        tvTimerText.setOnClickListener { presenter.onTimerTextClick() }
-        ivReset.setOnClickListener { presenter.onResetTimerClick() }
+        ivBtnReset.setOnClickListener { mPresenter.onResetTimerClick() }
+        ivSettings.setOnClickListener { mPresenter.onSettingsClick() }
+        ivStart.setOnClickListener { mPresenter.onStartTimerClick() }
+        ivPause.setOnClickListener { mPresenter.onPauseTimerClick() }
+        ivReset.setOnClickListener { mPresenter.onResetTimerClick() }
     }
 
     override fun startSettingsActivity() {
@@ -60,13 +58,13 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
 
     override fun showTimerInProgress() {
         runOnUiThread {
-            vsTimerReset.displayedChild = TIMER_IN_PROGRESS
+            vsTimerButtons.displayedChild = TIMER_IN_PROGRESS
         }
     }
 
     override fun showTimerEndProgress() {
         runOnUiThread {
-            vsTimerReset.displayedChild = TIMER_END_PROGRESS
+            vsTimerButtons.displayedChild = TIMER_END_PROGRESS
         }
     }
 
@@ -77,11 +75,11 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
     }
 
     override fun playMainSignal() {
-        PlaySoundManager.playSound(this, MAIN_SIGNAL_URI)
+        PlaySoundManager.playSound(this, rawSoundParser(R.raw.start_end))
     }
 
     override fun playSecondarySignal() {
-        PlaySoundManager.playSound(this, SECONDARY_SIGNAL_URI)
+        PlaySoundManager.playSound(this, rawSoundParser(R.raw.alarm))
     }
 
     override fun updateTimerBackgroundProgress(angle: Float) {
@@ -89,4 +87,6 @@ class TimerActivity : MvpAppCompatActivity(), TimerView {
             tpbvTimerBackground.update(angle)
         }
     }
+
+    private fun rawSoundParser(rawId: Int): String = "android.resource://$packageName${File.separator}$rawId"
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="anoda.mobi.anoda_turn_timer">
+    package="anoda.mobi.anoda_turn_timer">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".App"
@@ -13,20 +13,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.splash.SplashActivity">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="ea7dfb6a1f6555e29edb99c288c71f9fdf6a47a3"/>
+            android:value="ea7dfb6a1f6555e29edb99c288c71f9fdf6a47a3" />
 
-        <activity android:name=".ui.timer.TimerActivity"/>
-        <activity android:name=".ui.settings.SettingsActivity"/>
+
+        <activity android:name=".ui.timer.TimerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="anoda.mobi"
+                    android:scheme="https" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.settings.SettingsActivity" />
     </application>
 
 </manifest>

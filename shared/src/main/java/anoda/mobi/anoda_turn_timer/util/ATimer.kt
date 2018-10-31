@@ -1,5 +1,6 @@
-package anoda.mobi.anoda_turn_timer.utils
+package anoda.mobi.anoda_turn_timer.util
 
+import android.util.Log
 import java.util.*
 
 class ATimer(val timerInteraction: ATimerInteraction) {
@@ -72,8 +73,9 @@ class ATimer(val timerInteraction: ATimerInteraction) {
 
     private lateinit var timer: Timer
     private val timerStateManager = ATimerStateManager()
+    private var run = true
 
-    public fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+    fun startTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
         if (secondsToEnd < 0 || secondsSecondaryBeforeEnd < 0) {
             throw IllegalArgumentException("Seconds can't be negative")
         }
@@ -81,19 +83,20 @@ class ATimer(val timerInteraction: ATimerInteraction) {
         timerStateManager.setTime(secondsToEnd, secondsSecondaryBeforeEnd)
 
         if (timerStateManager.isTimerStarted.not()) {
+            run = true
             startTimer()
         } else {
             resetTimer(secondsToEnd, secondsSecondaryBeforeEnd)
         }
     }
 
-    public fun resumeTimer() {
+    fun resumeTimer() {
         timerStateManager.restoreState()
 
         startTimer(timerStateManager.secondsToEnd, timerStateManager.secondsSecondaryBeforeEnd)
     }
 
-    public fun pauseTimer() {
+    fun pauseTimer() {
         timer.cancel()
         timer.purge()
 
@@ -103,14 +106,15 @@ class ATimer(val timerInteraction: ATimerInteraction) {
         timerStateManager.setTimerFinished()
     }
 
-    public fun stopTimer() {
+    fun stopTimer() {
         timer.cancel()
         timer.purge()
         timerInteraction.onMainTimerFinished()
         timerStateManager.reset()
     }
 
-    public fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+    fun resetTimer(secondsToEnd: Long, secondsSecondaryBeforeEnd: Long) {
+        run = false
         stopTimer()
         startTimer(secondsToEnd, secondsSecondaryBeforeEnd)
     }
@@ -121,7 +125,6 @@ class ATimer(val timerInteraction: ATimerInteraction) {
 
         timer.schedule(object : TimerTask() {
             override fun run() {
-                timerStateManager.incrementElapsedTime()
                 if (timerStateManager.isMainTimerFinished()) {
                     stopTimer()
                     return
@@ -129,11 +132,17 @@ class ATimer(val timerInteraction: ATimerInteraction) {
                 if (timerStateManager.isSecondaryTimerFinished()) {
                     timerInteraction.onSecondaryTimerFinished()
                 }
-                timerInteraction.onNewTimerCycle(timerStateManager.secondsLeft)
+                Log.d("ATimer", "${timerStateManager.secondsLeft}")
+                if (run) {
+                    timerInteraction.onNewTimerCycle(timerStateManager.secondsLeft)
+                } else {
+                    stopTimer()
+                    return
+                }
+                timerStateManager.incrementElapsedTime()
             }
         }, TIMER_DELAY, TIMER_INTERVAL)
     }
-
 }
 
 interface ATimerInteraction {

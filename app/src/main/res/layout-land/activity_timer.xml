@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:fitsSystemWindows="true"
+    tools:context=".ui.timer.TimerActivity">
+
+    <anoda.mobi.anoda_turn_timer.view.TimerProgressBackgroundView
+        android:id="@+id/tpbvTimerBackground"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
+        android:layout_marginStart="108dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ViewSwitcher
+        android:id="@+id/vsTimerButtons"
+        android:layout_width="@dimen/time_picker_oval_width"
+        android:layout_height="@dimen/time_picker_oval_width"
+        app:layout_constraintBottom_toBottomOf="@id/tpbvTimerBackground"
+        app:layout_constraintEnd_toEndOf="@id/tpbvTimerBackground"
+        app:layout_constraintStart_toStartOf="@id/tpbvTimerBackground"
+        app:layout_constraintTop_toTopOf="@id/tpbvTimerBackground">
+
+        <TextView
+            android:id="@+id/tvTimerText"
+            style="@style/TitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="90sp"
+            tools:text="00:00" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivBtnReset"
+            android:layout_width="143dp"
+            android:layout_height="116dp"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="67dp"
+            android:contentDescription="@string/description_restart"
+            app:srcCompat="@drawable/ic_reset_ripple" />
+
+    </ViewSwitcher>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintNavigation"
+        android:layout_width="109dp"
+        android:layout_height="275dp"
+        android:layout_marginStart="81dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="92dp"
+        android:background="@drawable/ic_combined_shape_90"
+        app:layout_constraintBottom_toBottomOf="@id/tpbvTimerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tpbvTimerBackground"
+        app:layout_constraintTop_toTopOf="@id/tpbvTimerBackground">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivSettings"
+            android:layout_width="@dimen/circle_button_size_horizontal"
+            android:layout_height="@dimen/circle_button_size_horizontal"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="30dp"
+            android:contentDescription="@string/description_settings"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_settings_ripple" />
+
+        <ViewSwitcher
+            android:id="@+id/vsActionButtons"
+            android:layout_width="@dimen/circle_button_start_pause_size_land"
+            android:layout_height="@dimen/circle_button_start_pause_size_land"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="39dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="39dp"
+            app:layout_constraintBottom_toTopOf="@id/ivReset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivSettings">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivStart"
+                android:layout_width="@dimen/circle_button_start_pause_size_land"
+                android:layout_height="@dimen/circle_button_start_pause_size_land"
+                android:contentDescription="@string/description_start"
+                app:srcCompat="@drawable/ic_start_ripple" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/ivPause"
+                android:layout_width="@dimen/circle_button_start_pause_size_land"
+                android:layout_height="@dimen/circle_button_start_pause_size_land"
+                android:contentDescription="@string/description_pause"
+                app:srcCompat="@drawable/ic_pause_ripple" />
+
+        </ViewSwitcher>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/ivReset"
+            android:layout_width="@dimen/circle_button_size_horizontal"
+            android:layout_height="@dimen/circle_button_size_horizontal"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_reset_bg_ripple" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

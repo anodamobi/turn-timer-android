@@ -11,6 +11,6 @@ import javax.inject.Singleton
 interface ApplicationComponent {
 
     fun inject(presenter: TimerPresenter)
-    fun inject(presenter: SettingsPresenter)
 
+    fun inject(presenter: SettingsPresenter)
 }

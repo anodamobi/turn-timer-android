@@ -2,9 +2,9 @@ package anoda.mobi.anoda_turn_timer.ui.timer
 
 import android.content.Context
 import anoda.mobi.anoda_turn_timer.App
-import anoda.mobi.anoda_turn_timer.utils.ATimer
-import anoda.mobi.anoda_turn_timer.utils.ATimerInteraction
-import anoda.mobi.anoda_turn_timer.utils.SharedPreferencesManager
+import anoda.mobi.anoda_turn_timer.util.ATimer
+import anoda.mobi.anoda_turn_timer.util.ATimerInteraction
+import anoda.mobi.anoda_turn_timer.util.SharedPreferencesManager
 import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import kotlinx.coroutines.experimental.android.UI
@@ -18,22 +18,23 @@ import javax.inject.Inject
 class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     companion object {
-        const val MINUTES_IN_HOUR = 60
         const val SECONDS_IN_MINUTE = 60
         const val ANGLES_IN_CIRCLE = 360
 
         const val READ_SETTINGS_DELAY = 500L
+        private const val RESUME_DELAY = 1000L
     }
 
     private var isTimerStarted = false
     private var isTimerPaused = false
-    private var aTimer: ATimer = ATimer(this)
-    private var currentTimerTimeToEnd = 0L //timeToEnd for current started timer
+    private var mATimer: ATimer = ATimer(this)
+    private var mCurrentTimerTimeToEnd = 0L //timeToEnd for current started timer
 
-    private var innerElapsedTime = 0
+    private var mInnerElapsedTime = 0
+    private var pausedTime: Long = 0L
 
     @Inject
-    lateinit var context: Context
+    lateinit var mContext: Context
 
     init {
         App.appComponent.inject(this)
@@ -41,7 +42,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
     override fun onDestroy() {
         if (isTimerStarted || isTimerPaused)
-            aTimer.stopTimer()
+            mATimer.stopTimer()
         super.onDestroy()
     }
 
@@ -52,6 +53,60 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
             checkIsShouldUpdateTimerText()
             checkIsTimerStartedAndDurationChanged()
         }
+    }
+
+    override fun onMainTimerFinished() {
+        mainTimerFinished()
+        viewState.playMainSignal()
+    }
+
+    override fun onSecondaryTimerFinished() {
+        viewState.playSecondarySignal()
+    }
+
+    override fun onNewTimerCycle(timeLeft: Long) {
+        val progressAngle = getAngleForTimerBackground(mInnerElapsedTime)
+        mInnerElapsedTime++
+        val text = formatText(timeLeft)
+        onTimerNextIteration(text, progressAngle)
+    }
+
+    fun onStartTimerClick() {
+        Timber.d("Start clicked")
+        synchronized(this) {
+            if (isTimerPaused.not()) {
+                startTimer()
+            } else {
+                val delay = pausedTime + RESUME_DELAY
+                if (System.currentTimeMillis() > delay) {
+                    resumeTimer()
+                }
+            }
+        }
+    }
+
+    fun onPauseTimerClick() {
+        synchronized(this) {
+            pausedTime = System.currentTimeMillis()
+            Timber.d("Pause clicked")
+            pauseTimer()
+        }
+    }
+
+    fun onResetTimerClick() {
+        Timber.d("Reset clicked")
+        if (isTimerStarted.not()) {
+            startTimer()
+        }
+
+        if (isTimerStarted || isTimerPaused) resetTimer()
+    }
+
+    fun onSettingsClick() {
+        if (isTimerStarted && isTimerPaused.not()) {
+            onPauseTimerClick()
+        }
+        viewState.startSettingsActivity()
     }
 
     private fun checkIsShouldUpdateTimerText() {
@@ -66,49 +121,20 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
     }
 
     private fun checkIsTimerStartedAndDurationChanged() {
-        if (SharedPreferencesManager.isTimeChanged(this@TimerPresenter.context) && (isTimerStarted || isTimerPaused)) {
+        val isTimeChanged = SharedPreferencesManager.isTimeChanged(this@TimerPresenter.mContext)
+
+        if (isTimeChanged && (isTimerStarted || isTimerPaused)) {
             mainTimerFinished()
             updateTimerText()
             viewState.updateTimerBackgroundProgress(ANGLES_IN_CIRCLE.toFloat())
             viewState.showTimerInProgress()
-            SharedPreferencesManager.setTimeChanged(this@TimerPresenter.context, false)
+            SharedPreferencesManager.setTimeChanged(this@TimerPresenter.mContext, false)
         }
     }
 
-    private fun getTimeToEnd() = SharedPreferencesManager.loadMainTimerTime(context).toLong()
+    private fun getTimeToEnd() = SharedPreferencesManager.loadMainTimerTime(mContext).toLong()
 
-    private fun getTimeToEndPlaySignal() = SharedPreferencesManager.loadSecondaryTimerTime(context).toLong()
-
-    fun onStartTimerClick() {
-        if (isTimerPaused.not()) {
-            startTimer()
-        } else {
-            resumeTimer()
-        }
-    }
-
-    fun onPauseTimerClick() {
-        pauseTimer()
-    }
-
-    fun onResetTimerClick() {
-        resetTimer()
-    }
-
-    fun onTimerTextClick() {
-        if (isTimerStarted.not()) {
-            startTimer()
-        } else {
-            resetTimer()
-        }
-    }
-
-    fun onSettingsClick() {
-        if (isTimerStarted && isTimerPaused.not()) {
-            onPauseTimerClick()
-        }
-        viewState.startSettingsActivity()
-    }
+    private fun getTimeToEndPlaySignal() = SharedPreferencesManager.loadSecondaryTimerTime(mContext).toLong()
 
     private fun startTimer() {
         isTimerStarted = true
@@ -118,25 +144,27 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showTimerInProgress()
         viewState.showPauseButton()
 
-        aTimer.startTimer(getTimeToEnd(), getTimeToEndPlaySignal())
+        mATimer.startTimer(getTimeToEnd(), getTimeToEndPlaySignal())
         setTimeToEnd()
         viewState.playMainSignal()
     }
 
     private fun resetTimer() {
-        aTimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
-        setTimeToEnd()
+        synchronized(this) {
+            mATimer.resetTimer(getTimeToEnd(), getTimeToEndPlaySignal())
+            setTimeToEnd()
 
-        isTimerStarted = true
-        isTimerPaused = false
+            isTimerStarted = true
+            isTimerPaused = false
 
-        viewState.showTimerInProgress()
-        viewState.showPauseButton()
-        Timber.i("reset")
+            viewState.showTimerInProgress()
+            viewState.showPauseButton()
+            Timber.i("reset")
+        }
     }
 
     private fun setTimeToEnd() {
-        currentTimerTimeToEnd = getTimeToEnd()
+        mCurrentTimerTimeToEnd = getTimeToEnd()
     }
 
     private fun pauseTimer() {
@@ -144,7 +172,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         Timber.i("pause")
 
         viewState.showStartButton()
-        aTimer.pauseTimer()
+        mATimer.pauseTimer()
     }
 
     private fun resumeTimer() {
@@ -152,12 +180,7 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
 
         Timber.i("resume")
         viewState.showPauseButton()
-        aTimer.resumeTimer()
-    }
-
-    override fun onMainTimerFinished() {
-        mainTimerFinished()
-        viewState.playMainSignal()
+        mATimer.resumeTimer()
     }
 
     private fun mainTimerFinished() {
@@ -167,13 +190,8 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         viewState.showTimerEndProgress()
         viewState.showStartButton()
 
-        innerElapsedTime = 0
-    }
-
-    override fun onNewTimerCycle(timeLeft: Long) {
-        innerElapsedTime++
-        val text = formatText(timeLeft)
-        onTimerNextIteration(text)
+        mInnerElapsedTime = 0
+        viewState.updateTimerBackgroundProgress(mInnerElapsedTime.toFloat())
     }
 
     private fun formatText(timeLeft: Long): String {
@@ -187,19 +205,15 @@ class TimerPresenter : MvpPresenter<TimerView>(), ATimerInteraction {
         }
     }
 
-    private fun onTimerNextIteration(timeLeftText: String) {
+    private fun onTimerNextIteration(timeLeftText: String, progressAngle: Float) {
+        viewState.showTimerInProgress()
+        viewState.showPauseButton()
         viewState.updateTimerText(timeLeftText)
-        viewState.updateTimerBackgroundProgress(getAngleForTimerBackground())
+        viewState.updateTimerBackgroundProgress(progressAngle)
     }
 
-    private fun getAngleForTimerBackground(): Float {
-        val stepSize = ANGLES_IN_CIRCLE.toFloat() / currentTimerTimeToEnd
+    private fun getAngleForTimerBackground(innerElapsedTime: Int): Float {
+        val stepSize = ANGLES_IN_CIRCLE.toFloat() / mCurrentTimerTimeToEnd
         return ANGLES_IN_CIRCLE - (innerElapsedTime * stepSize)
     }
-
-    override fun onSecondaryTimerFinished() {
-        viewState.playSecondarySignal()
-    }
-
-
 }

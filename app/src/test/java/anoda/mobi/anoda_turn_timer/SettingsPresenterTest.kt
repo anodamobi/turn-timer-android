@@ -21,7 +21,7 @@ class SettingsPresenterTest {
         val settingsViewState = Mockito.mock(`SettingsView$$State`::class.java)
         val presenter = PowerMockito.mock(SettingsPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(settingsViewState)
 
         PowerMockito.`when`(presenter.attachView(settingsView)).thenCallRealMethod()
@@ -38,7 +38,7 @@ class SettingsPresenterTest {
         val settingsViewState = Mockito.mock(`SettingsView$$State`::class.java)
         val presenter = PowerMockito.mock(SettingsPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(settingsViewState)
         presenter.attachView(settingsView)
 
@@ -56,7 +56,7 @@ class SettingsPresenterTest {
         val settingsViewState = Mockito.mock(`SettingsView$$State`::class.java)
         val presenter = PowerMockito.mock(SettingsPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(settingsViewState)
         presenter.attachView(settingsView)
 
@@ -76,7 +76,7 @@ class SettingsPresenterTest {
         val settingsViewState = Mockito.mock(`SettingsView$$State`::class.java)
         val presenter = PowerMockito.mock(SettingsPresenter::class.java)
         val context = Mockito.mock(Context::class.java)
-        presenter.context = context
+        presenter.mContext = context
         presenter.setViewState(settingsViewState)
         presenter.attachView(settingsView)
 
